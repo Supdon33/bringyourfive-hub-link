@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
 import GymCard from "@/components/GymCard";
+import AddGymDialog from "@/components/AddGymDialog";
 
 const games = [
   { title: "5v5 Open Run", location: "Downtown", time: "6:00 PM", skillLevel: "adult" as SkillLevel, spotsTotal: 10, spotsFilled: 7, gymName: "City Rec Center" },
@@ -22,6 +24,8 @@ const gyms = [
 
 const Index = () => {
   const [selectedSkill, setSelectedSkill] = useState<SkillLevel | "all">("all");
+  const [gymList, setGymList] = useState(gyms);
+  const [showAddGym, setShowAddGym] = useState(false);
 
   const filteredGames = selectedSkill === "all"
     ? games
@@ -71,15 +75,32 @@ const Index = () => {
 
       {/* Gyms Section */}
       <section id="gyms" className="container mx-auto px-4 pb-20">
-        <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Featured Gyms</h2>
-        <p className="text-muted-foreground mb-8">Local courts hosting pickup games</p>
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Featured Gyms</h2>
+            <p className="text-muted-foreground">Local courts hosting pickup games</p>
+          </div>
+          <button
+            onClick={() => setShowAddGym(true)}
+            className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            Add Gym
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {gyms.map((gym, i) => (
+          {gymList.map((gym, i) => (
             <GymCard key={i} {...gym} />
           ))}
         </div>
       </section>
+
+      <AddGymDialog
+        open={showAddGym}
+        onClose={() => setShowAddGym(false)}
+        onAdd={(gym) => setGymList((prev) => [...prev, gym])}
+      />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
