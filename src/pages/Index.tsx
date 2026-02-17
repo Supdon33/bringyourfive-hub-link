@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
+import BrandLogo from "@/components/BrandLogo";
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
 import GymCard from "@/components/GymCard";
@@ -36,7 +37,7 @@ const Index = () => {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
-          <span className="font-display text-2xl text-primary tracking-wider">CourtConnect</span>
+          <BrandLogo />
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#games" className="hover:text-foreground transition-colors">Games</a>
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
@@ -105,7 +106,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-          <span className="font-display text-lg text-primary tracking-wider">CourtConnect</span>
+          <BrandLogo size="small" />
           <p className="mt-2">Connecting ballers with courts since 2025.</p>
         </div>
       </footer>
