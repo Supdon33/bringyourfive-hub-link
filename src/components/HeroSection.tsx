@@ -1,4 +1,5 @@
 import heroImage from "@/assets/hero-court.jpg";
+import BasketballLogo from "./BasketballLogo";
 
 const HeroSection = () => {
   return (
@@ -10,15 +11,13 @@ const HeroSection = () => {
       />
       <div className="absolute inset-0 bg-gradient-hero" />
 
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-        <p className="text-primary font-semibold tracking-[0.3em] uppercase text-sm mb-4 animate-pulse-glow">
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+        <p className="text-primary font-semibold tracking-[0.3em] uppercase text-sm mb-6 animate-pulse-glow">
           Find Your Next Game
         </p>
-        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl text-foreground leading-[0.9] mb-6 text-glow">
-          Run With
-          <br />
-          <span className="text-primary">Your Squad</span>
-        </h1>
+
+        <BasketballLogo className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 drop-shadow-2xl mb-8" />
+
         <p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-8">
           Connect with local gyms, find pickup games at your skill level, and never miss a run again.
         </p>
