@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Menu, X } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
 import GymCard from "@/components/GymCard";
 import AddGymDialog from "@/components/AddGymDialog";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const games = [
   { title: "5v5 Open Run", location: "Downtown", time: "6:00 PM", skillLevel: "adult" as SkillLevel, spotsTotal: 10, spotsFilled: 7, gymName: "City Rec Center" },
@@ -39,23 +40,41 @@ const Index = () => {
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <BrandLogo />
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#games" className="hover:text-foreground transition-colors">Games</a>
+            <a href="#runs" className="hover:text-foreground transition-colors">Runs</a>
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
           </div>
-          <button className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all">
-            Sign Up
-          </button>
+          <div className="hidden sm:block">
+            <button className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all">
+              Sign Up
+            </button>
+          </div>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="sm:hidden p-2 text-foreground">
+                <Menu className="w-5 h-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64 bg-background border-border">
+              <nav className="flex flex-col gap-6 mt-8">
+                <a href="#runs" className="text-lg font-display text-foreground hover:text-primary transition-colors">Runs</a>
+                <a href="#gyms" className="text-lg font-display text-foreground hover:text-primary transition-colors">Gyms</a>
+                <button className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all w-full">
+                  Sign Up
+                </button>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
 
       <HeroSection />
 
       {/* Games Section */}
-      <section id="games" className="container mx-auto px-4 py-20">
+      <section id="runs" className="container mx-auto px-4 py-20">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Upcoming Games</h2>
-            <p className="text-muted-foreground mt-1">Find a game that matches your level</p>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Available Runs</h2>
+            <p className="text-muted-foreground mt-1">Find a run that matches your level</p>
           </div>
           <SkillFilter selected={selectedSkill} onChange={setSelectedSkill} />
         </div>
