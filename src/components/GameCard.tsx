@@ -29,9 +29,6 @@ const GameCard = ({ title, location, time, skillLevel, spotsTotal, spotsFilled, 
         <span className={`${skill.colorClass} text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider`}>
           {skill.label}
         </span>
-        <span className="text-muted-foreground text-sm">
-          {spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left
-        </span>
       </div>
 
       <h3 className="font-display text-xl text-foreground mb-1">{title}</h3>
