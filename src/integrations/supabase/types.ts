@@ -14,7 +14,144 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      active_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string | null
+          session_token: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          session_token: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          session_token?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          cell_phone: string | null
+          created_at: string
+          email: string
+          first_name: string
+          home_state: string | null
+          id: string
+          last_name: string
+          updated_at: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          cell_phone?: string | null
+          created_at?: string
+          email: string
+          first_name: string
+          home_state?: string | null
+          id?: string
+          last_name: string
+          updated_at?: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          cell_phone?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string
+          home_state?: string | null
+          id?: string
+          last_name?: string
+          updated_at?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      runs: {
+        Row: {
+          created_at: string
+          gym_name: string
+          id: string
+          location: string
+          skill_level: string
+          spots_filled: number
+          spots_total: number
+          state: string | null
+          time: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          gym_name: string
+          id?: string
+          location: string
+          skill_level: string
+          spots_filled?: number
+          spots_total?: number
+          state?: string | null
+          time: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          gym_name?: string
+          id?: string
+          location?: string
+          skill_level?: string
+          spots_filled?: number
+          spots_total?: number
+          state?: string | null
+          time?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          status: string
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          status?: string
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          status?: string
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +160,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_tier: "tier1" | "tier2" | "gym_listing"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +287,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      subscription_tier: ["tier1", "tier2", "gym_listing"],
+    },
   },
 } as const
