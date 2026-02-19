@@ -25,9 +25,9 @@ const HeroSection = () => {
           <a href="#runs" className="bg-primary text-primary-foreground font-display text-lg px-8 py-4 rounded-lg hover:brightness-110 transition-all duration-200 tracking-wider">
             Available Runs
           </a>
-          <button className="border border-border text-foreground font-display text-lg px-8 py-4 rounded-lg hover:bg-secondary transition-all duration-200 tracking-wider">
+          <a href="#gyms" className="border border-border text-foreground font-display text-lg px-8 py-4 rounded-lg hover:bg-secondary transition-all duration-200 tracking-wider">
             List Your Gym
-          </button>
+          </a>
         </div>
       </div>
 
