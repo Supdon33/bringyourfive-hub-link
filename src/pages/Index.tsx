@@ -125,7 +125,7 @@ const Index = () => {
         </div>
 
         {/* Gated content */}
-        {!loading && (!user || !hasActiveSub) ? (
+        {!loading && false ? (
           <div className="text-center py-20 border border-border rounded-lg bg-card">
             <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="font-display text-2xl text-foreground mb-2">Subscribers Only</h3>
