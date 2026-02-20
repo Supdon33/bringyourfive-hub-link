@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { RUNS_QUERY_KEY } from "@/hooks/useRuns";
 import type { SkillLevel } from "@/components/GameCard";
 
 interface ListRunDialogProps {
@@ -17,6 +19,7 @@ interface ListRunDialogProps {
 const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -45,6 +48,7 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
     } else {
       toast({ title: "Run listed!" });
       setTitle(""); setLocation(""); setGymName(""); setTime(""); setSpotsTotal(10);
+      queryClient.invalidateQueries({ queryKey: RUNS_QUERY_KEY });
       onAdded();
       onClose();
     }

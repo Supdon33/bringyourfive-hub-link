@@ -10,16 +10,8 @@ import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
-import { Lock } from "lucide-react";
-
-const games = [
-  { title: "5v5 Open Run", location: "Downtown", time: "6:00 PM", skillLevel: "adult" as SkillLevel, spotsTotal: 10, spotsFilled: 7, gymName: "City Rec Center" },
-  { title: "3v3 Half Court", location: "Westside", time: "4:00 PM", skillLevel: "highschool" as SkillLevel, spotsTotal: 6, spotsFilled: 4, gymName: "Westside YMCA" },
-  { title: "Youth Skills Clinic", location: "Northpark", time: "10:00 AM", skillLevel: "elementary" as SkillLevel, spotsTotal: 12, spotsFilled: 8, gymName: "Northpark Community" },
-  { title: "College Level Run", location: "Midtown", time: "8:00 PM", skillLevel: "college" as SkillLevel, spotsTotal: 10, spotsFilled: 9, gymName: "Elite Sports Complex" },
-  { title: "Pickup Full Court", location: "Eastside", time: "7:00 PM", skillLevel: "adult" as SkillLevel, spotsTotal: 10, spotsFilled: 3, gymName: "Eastside Fitness" },
-  { title: "After School Hoops", location: "Southgate", time: "3:30 PM", skillLevel: "highschool" as SkillLevel, spotsTotal: 8, spotsFilled: 6, gymName: "Southgate High Gym" },
-];
+import { useRuns } from "@/hooks/useRuns";
+import { Lock, Loader2 } from "lucide-react";
 
 const gyms = [
   { name: "City Rec Center", address: "123 Main St, Downtown", rating: 4.5, gamesThisWeek: 8 },
@@ -35,9 +27,7 @@ const Index = () => {
   const [showListRun, setShowListRun] = useState(false);
   const { user, hasActiveSub, loading, signOut } = useAuth();
 
-  const filteredGames = selectedSkill === "all"
-    ? games
-    : games.filter((g) => g.skillLevel === selectedSkill);
+  const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill);
 
   return (
     <div className="min-h-screen bg-background">
@@ -156,15 +146,28 @@ const Index = () => {
               </Link>
             )}
           </div>
+        ) : runsLoading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+          </div>
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredGames.map((game, i) => (
-                <GameCard key={i} {...game} />
+              {runs.map((run) => (
+                <GameCard
+                  key={run.id}
+                  title={run.title}
+                  location={run.location}
+                  time={run.time}
+                  skillLevel={run.skill_level as SkillLevel}
+                  spotsTotal={run.spots_total}
+                  spotsFilled={run.spots_filled}
+                  gymName={run.gym_name}
+                />
               ))}
             </div>
 
-            {filteredGames.length === 0 && (
+            {runs.length === 0 && (
               <div className="text-center py-16 text-muted-foreground">
                 <p className="text-lg">No games at this level right now.</p>
                 <p className="text-sm mt-1">Check back soon or try another skill level.</p>
