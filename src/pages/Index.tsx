@@ -111,7 +111,7 @@ const Index = () => {
             <p className="text-muted-foreground mt-1">Find a run that matches your level</p>
           </div>
           <div className="flex items-center gap-3">
-            {user && hasActiveSub && (
+            {user && (
               <button
                 onClick={() => setShowListRun(true)}
                 className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
@@ -214,6 +214,7 @@ const Index = () => {
         open={showListRun}
         onClose={() => setShowListRun(false)}
         onAdded={() => {/* will refetch from DB in future */}}
+        gyms={gymList}
       />
 
       {/* Footer */}
