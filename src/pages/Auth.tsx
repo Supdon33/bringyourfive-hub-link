@@ -24,7 +24,7 @@ const Auth = () => {
   const navigate = useNavigate();
 
   // Sign In state
-  const [signInEmail, setSignInEmail] = useState("");
+  const [signInUsername, setSignInUsername] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
 
   // Sign Up state
@@ -41,8 +41,22 @@ const Auth = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Look up email by username
+    const { data: profile, error: lookupError } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq("username", signInUsername)
+      .maybeSingle();
+
+    if (lookupError || !profile) {
+      setLoading(false);
+      toast({ title: "Sign in failed", description: "Username not found.", variant: "destructive" });
+      return;
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
-      email: signInEmail,
+      email: profile.email,
       password: signInPassword,
     });
     setLoading(false);
@@ -110,8 +124,8 @@ const Auth = () => {
         {mode === "signin" ? (
           <form onSubmit={handleSignIn} className="space-y-4">
             <div>
-              <Label htmlFor="signin-email">Email</Label>
-              <Input id="signin-email" type="email" value={signInEmail} onChange={(e) => setSignInEmail(e.target.value)} required />
+              <Label htmlFor="signin-username">Username</Label>
+              <Input id="signin-username" type="text" value={signInUsername} onChange={(e) => setSignInUsername(e.target.value)} required />
             </div>
             <div>
               <Label htmlFor="signin-password">Password</Label>
