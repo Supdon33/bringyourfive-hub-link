@@ -8,7 +8,7 @@ const BrandLogo = ({ size = "default" }: { size?: "default" | "small" }) => {
     <span className={`font-display ${textClass} tracking-wider inline-flex items-center gap-2`}>
       <img src={logoImage} alt="Bring Your Five" className={`${imgClass} rounded-full object-cover`} />
       <span className="text-foreground">Bring Your</span>
-      <span className="text-primary">Five</span>
+      <span className="text-2xl">🖐🏿</span>
     </span>
   );
 };
