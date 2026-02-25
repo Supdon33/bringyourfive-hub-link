@@ -1,5 +1,3 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -17,16 +15,21 @@ Deno.serve(async (req) => {
       throw new Error("HUBSPOT_ACCESS_TOKEN not configured");
     }
 
-    const { record } = await req.json();
+    const body = await req.json();
+    console.log("Received body:", JSON.stringify(body));
+    const email = body.email;
+    const firstName = body.firstName || "";
+    const lastName = body.lastName || "";
+    const cellPhone = body.cellPhone || "";
+    const homeState = body.homeState || "";
 
-    // record comes from the DB webhook or direct call
     const contact = {
       properties: {
-        email: record.email,
-        firstname: record.first_name,
-        lastname: record.last_name,
-        phone: record.cell_phone || "",
-        state: record.home_state || "",
+        email,
+        firstname: firstName,
+        lastname: lastName,
+        phone: cellPhone,
+        state: homeState,
         hs_lead_status: "NEW",
         lifecyclestage: "subscriber",
       },
