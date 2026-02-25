@@ -196,6 +196,7 @@ const Auth = () => {
               <Label htmlFor="cellPhone">Cell Phone</Label>
               <Input id="cellPhone" type="tel" value={cellPhone} onChange={(e) => setCellPhone(e.target.value)} />
             </div>
+            {accountType === "individual" && (
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label htmlFor="birthMonth">Birth Month</Label>
@@ -226,6 +227,7 @@ const Auth = () => {
                 </select>
               </div>
             </div>
+            )}
             <div>
               <Label htmlFor="homeState">Home State</Label>
               <select
