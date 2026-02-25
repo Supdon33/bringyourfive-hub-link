@@ -1,5 +1,6 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from "react";
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 import type { User, Session } from "@supabase/supabase-js";
 
 interface Subscription {
@@ -72,12 +73,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const hasTier = (tier: "tier1" | "tier2" | "gym_listing") =>
     subscriptions.some((s) => s.tier === tier && s.status === "active");
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
     setSession(null);
     setSubscriptions([]);
-  };
+  }, []);
+
+  useInactivityTimeout(signOut, !!user);
 
   return (
     <AuthContext.Provider value={{ user, session, loading, subscriptions, hasActiveSub, hasTier, signOut }}>
