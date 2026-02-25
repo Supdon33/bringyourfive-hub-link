@@ -85,6 +85,10 @@ const Auth = () => {
           last_name: lastName,
           username,
           account_type: accountType,
+          cell_phone: cellPhone || null,
+          birth_month: birthMonth ? parseInt(birthMonth) : null,
+          birth_year: birthYear ? parseInt(birthYear) : null,
+          home_state: homeState || null,
         },
       },
     });
