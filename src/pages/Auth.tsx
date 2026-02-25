@@ -97,6 +97,10 @@ const Auth = () => {
       toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Check your email", description: "We sent a verification link to your email address." });
+      // Fire-and-forget HubSpot sync
+      supabase.functions.invoke("sync-hubspot-contact", {
+        body: { email, firstName, lastName, cellPhone, homeState },
+      }).catch(() => {});
     }
   };
 
