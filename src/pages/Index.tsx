@@ -22,7 +22,7 @@ const Index = () => {
   const [gymList, setGymList] = useState(gyms);
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
-  const { user, hasActiveSub, loading, signOut } = useAuth();
+  const { user, username, hasActiveSub, loading, signOut } = useAuth();
 
   const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill);
 
@@ -40,7 +40,7 @@ const Index = () => {
             {user ? (
               <>
                 <span className="text-sm text-muted-foreground">
-                  {user.user_metadata?.first_name || user.email}
+                  {username || user.user_metadata?.first_name || user.email}
                 </span>
                 <button
                   onClick={signOut}
