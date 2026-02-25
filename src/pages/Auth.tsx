@@ -37,6 +37,7 @@ const Auth = () => {
   const [homeState, setHomeState] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthYear, setBirthYear] = useState("");
+  const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +84,7 @@ const Auth = () => {
           first_name: firstName,
           last_name: lastName,
           username,
+          account_type: accountType,
         },
       },
     });
@@ -137,13 +139,44 @@ const Auth = () => {
           </form>
         ) : (
           <form onSubmit={handleSignUp} className="space-y-4">
+            {/* Account Type Selection */}
+            <div className="space-y-2">
+              <Label>I am signing up as *</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setAccountType("individual")}
+                  className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                    accountType === "individual"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="text-2xl">🏀</span>
+                  <span className="font-display text-sm tracking-wider">Individual</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAccountType("gym")}
+                  className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                    accountType === "gym"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="text-2xl">🏟️</span>
+                  <span className="font-display text-sm tracking-wider">Gym</span>
+                </button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="firstName">First Name *</Label>
+                <Label htmlFor="firstName">{accountType === "gym" ? "Contact First Name *" : "First Name *"}</Label>
                 <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
               </div>
               <div>
-                <Label htmlFor="lastName">Last Name *</Label>
+                <Label htmlFor="lastName">{accountType === "gym" ? "Contact Last Name *" : "Last Name *"}</Label>
                 <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
               </div>
             </div>
