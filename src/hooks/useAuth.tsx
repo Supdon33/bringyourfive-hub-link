@@ -12,6 +12,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  username: string | null;
   subscriptions: Subscription[];
   hasActiveSub: boolean;
   hasTier: (tier: "tier1" | "tier2" | "gym_listing") => boolean;
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(
@@ -33,15 +35,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch subscriptions
-          const { data } = await supabase
-            .from("subscriptions")
-            .select("tier, status")
-            .eq("user_id", session.user.id)
-            .eq("status", "active");
-          setSubscriptions((data as Subscription[]) || []);
+          const [{ data: subs }, { data: profile }] = await Promise.all([
+            supabase.from("subscriptions").select("tier, status").eq("user_id", session.user.id).eq("status", "active"),
+            supabase.from("profiles").select("username").eq("user_id", session.user.id).single(),
+          ]);
+          setSubscriptions((subs as Subscription[]) || []);
+          setUsername(profile?.username ?? null);
         } else {
           setSubscriptions([]);
+          setUsername(null);
         }
         setLoading(false);
       }
@@ -51,15 +53,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        supabase
-          .from("subscriptions")
-          .select("tier, status")
-          .eq("user_id", session.user.id)
-          .eq("status", "active")
-          .then(({ data }) => {
-            setSubscriptions((data as Subscription[]) || []);
-            setLoading(false);
-          });
+        Promise.all([
+          supabase.from("subscriptions").select("tier, status").eq("user_id", session.user.id).eq("status", "active"),
+          supabase.from("profiles").select("username").eq("user_id", session.user.id).single(),
+        ]).then(([{ data: subs }, { data: profile }]) => {
+          setSubscriptions((subs as Subscription[]) || []);
+          setUsername(profile?.username ?? null);
+          setLoading(false);
+        });
       } else {
         setLoading(false);
       }
@@ -78,12 +79,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setSession(null);
     setSubscriptions([]);
+    setUsername(null);
   }, []);
 
   useInactivityTimeout(signOut, !!user);
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, subscriptions, hasActiveSub, hasTier, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, username, subscriptions, hasActiveSub, hasTier, signOut }}>
       {children}
     </AuthContext.Provider>
   );
