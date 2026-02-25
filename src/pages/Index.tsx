@@ -211,7 +211,6 @@ const Index = () => {
         open={showListRun}
         onClose={() => setShowListRun(false)}
         onAdded={() => {/* will refetch from DB in future */}}
-        gyms={gymList}
       />
 
       {/* Footer */}

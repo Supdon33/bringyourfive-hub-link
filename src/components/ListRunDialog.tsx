@@ -14,17 +14,16 @@ interface ListRunDialogProps {
   open: boolean;
   onClose: () => void;
   onAdded: () => void;
-  gyms: { name: string }[];
 }
 
-const ListRunDialog = ({ open, onClose, onAdded, gyms }: ListRunDialogProps) => {
+const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [gymName, setGymName] = useState(gyms[0]?.name ?? "");
+  const [gymName, setGymName] = useState("");
   const [time, setTime] = useState("");
   const [skillLevel, setSkillLevel] = useState<SkillLevel>("adult");
   const [spotsTotal, setSpotsTotal] = useState(10);
@@ -73,16 +72,7 @@ const ListRunDialog = ({ open, onClose, onAdded, gyms }: ListRunDialogProps) => 
             </div>
             <div>
               <Label>Gym</Label>
-              <select
-                value={gymName}
-                onChange={(e) => setGymName(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                required
-              >
-                {gyms.map((g) => (
-                  <option key={g.name} value={g.name}>{g.name}</option>
-                ))}
-              </select>
+              <Input value={gymName} onChange={(e) => setGymName(e.target.value)} placeholder="e.g. Athletic Republic" required />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
