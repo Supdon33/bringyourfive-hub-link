@@ -122,7 +122,21 @@ const Index = () => {
         </div>
 
         {/* Gated content */}
-        {!loading && false ? (
+        {!loading && !user ? (
+          <div className="text-center py-20 border border-border rounded-lg bg-card">
+            <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="font-display text-2xl text-foreground mb-2">Please Login to see Available Runs</h3>
+            <p className="text-muted-foreground mb-6">
+              Sign in or create an account to view and join runs.
+            </p>
+            <Link
+              to="/auth"
+              className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-3 rounded-lg hover:brightness-110 transition-all"
+            >
+              Sign In
+            </Link>
+          </div>
+        ) : !loading && false ? (
           <div className="text-center py-20 border border-border rounded-lg bg-card">
             <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="font-display text-2xl text-foreground mb-2">Subscribers Only</h3>
