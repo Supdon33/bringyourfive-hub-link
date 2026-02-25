@@ -14,10 +14,7 @@ import { useRuns } from "@/hooks/useRuns";
 import { Lock, Loader2 } from "lucide-react";
 
 const gyms = [
-  { name: "City Rec Center", address: "123 Main St, Downtown", rating: 4.5, gamesThisWeek: 8 },
-  { name: "Westside YMCA", address: "456 Oak Ave, Westside", rating: 4.2, gamesThisWeek: 5 },
-  { name: "Elite Sports Complex", address: "789 Court Dr, Midtown", rating: 4.8, gamesThisWeek: 12 },
-  { name: "Northpark Community", address: "321 Park Ln, Northpark", rating: 4.0, gamesThisWeek: 3 },
+  { name: "Athletic Republic", address: "6417 Marlboro Pike, District Heights, MD 20747", rating: 5.0, gamesThisWeek: 8 },
 ];
 
 const Index = () => {
