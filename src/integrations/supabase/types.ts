@@ -46,6 +46,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_type: string
           birth_month: number | null
           birth_year: number | null
           cell_phone: string | null
@@ -60,6 +61,7 @@ export type Database = {
           username: string
         }
         Insert: {
+          account_type?: string
           birth_month?: number | null
           birth_year?: number | null
           cell_phone?: string | null
@@ -74,6 +76,7 @@ export type Database = {
           username: string
         }
         Update: {
+          account_type?: string
           birth_month?: number | null
           birth_year?: number | null
           cell_phone?: string | null
