@@ -92,6 +92,30 @@ export type Database = {
         }
         Relationships: []
       }
+      run_participants: {
+        Row: {
+          display_name: string
+          id: string
+          joined_at: string
+          run_id: string
+          user_id: string
+        }
+        Insert: {
+          display_name: string
+          id?: string
+          joined_at?: string
+          run_id: string
+          user_id: string
+        }
+        Update: {
+          display_name?: string
+          id?: string
+          joined_at?: string
+          run_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       runs: {
         Row: {
           created_at: string
@@ -184,12 +208,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrement_spots_filled: {
+        Args: { run_id_input: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_spots_filled: {
+        Args: { run_id_input: string }
+        Returns: undefined
       }
     }
     Enums: {
