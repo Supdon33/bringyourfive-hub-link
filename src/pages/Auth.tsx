@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import BrandLogo from "@/components/BrandLogo";
+import ForgotPasswordDialog from "@/components/ForgotPasswordDialog";
 import { useToast } from "@/hooks/use-toast";
 
 const US_STATES = [
@@ -140,6 +141,9 @@ const Auth = () => {
             <div>
               <Label htmlFor="signin-password">Password</Label>
               <Input id="signin-password" type="password" value={signInPassword} onChange={(e) => setSignInPassword(e.target.value)} required />
+            </div>
+            <div className="flex justify-end">
+              <ForgotPasswordDialog />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in…" : "Sign In"}
