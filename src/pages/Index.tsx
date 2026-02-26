@@ -9,6 +9,7 @@ import GymCard from "@/components/GymCard";
 import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
 import RunDetailDialog from "@/components/RunDetailDialog";
+import ContactUsDialog from "@/components/ContactUsDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
@@ -247,6 +248,8 @@ const Index = () => {
         onClose={() => setSelectedRun(null)}
         run={selectedRun}
       />
+
+      <ContactUsDialog />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
