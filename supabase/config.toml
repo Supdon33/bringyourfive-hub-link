@@ -1,7 +1,4 @@
 project_id = "zqltgkoytraczfpedzvr"
 
-[functions]
-  [functions.auth-email-hook]
-    verify_jwt = false
-  [functions.sync-hubspot-contact]
-    verify_jwt = false
+[functions.sync-hubspot-contact]
+verify_jwt = false
