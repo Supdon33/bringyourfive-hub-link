@@ -76,10 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-    setSubscriptions([]);
-    setUsername(null);
+    window.location.replace("/");
   }, []);
 
   useInactivityTimeout(signOut, !!user);
