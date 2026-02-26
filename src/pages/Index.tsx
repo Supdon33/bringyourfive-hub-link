@@ -8,6 +8,7 @@ import SkillFilter from "@/components/SkillFilter";
 import GymCard from "@/components/GymCard";
 import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
+import RunDetailDialog from "@/components/RunDetailDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
@@ -22,6 +23,10 @@ const Index = () => {
   const [gymList, setGymList] = useState(gyms);
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
+  const [selectedRun, setSelectedRun] = useState<{
+    id: string; title: string; gymName: string; location: string;
+    time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
+  } | null>(null);
   const { user, username, hasActiveSub, loading, signOut } = useAuth();
 
   const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill);
@@ -174,6 +179,16 @@ const Index = () => {
                   spotsTotal={run.spots_total}
                   spotsFilled={run.spots_filled}
                   gymName={run.gym_name}
+                  onClick={() => setSelectedRun({
+                    id: run.id,
+                    title: run.title,
+                    gymName: run.gym_name,
+                    location: run.location,
+                    time: run.time,
+                    skillLevel: run.skill_level as SkillLevel,
+                    spotsTotal: run.spots_total,
+                    spotsFilled: run.spots_filled,
+                  })}
                 />
               ))}
             </div>
@@ -224,7 +239,13 @@ const Index = () => {
       <ListRunDialog
         open={showListRun}
         onClose={() => setShowListRun(false)}
-        onAdded={() => {/* will refetch from DB in future */}}
+        onAdded={() => {}}
+      />
+
+      <RunDetailDialog
+        open={!!selectedRun}
+        onClose={() => setSelectedRun(null)}
+        run={selectedRun}
       />
 
       {/* Footer */}

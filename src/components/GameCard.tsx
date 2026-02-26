@@ -10,6 +10,7 @@ interface GameCardProps {
   spotsTotal: number;
   spotsFilled: number;
   gymName: string;
+  onClick?: () => void;
 }
 
 const skillConfig: Record<SkillLevel, { label: string; colorClass: string }> = {
@@ -19,12 +20,12 @@ const skillConfig: Record<SkillLevel, { label: string; colorClass: string }> = {
   adult: { label: "Adult", colorClass: "bg-skill-adult" },
 };
 
-const GameCard = ({ title, location, time, skillLevel, spotsTotal, spotsFilled, gymName }: GameCardProps) => {
+const GameCard = ({ title, location, time, skillLevel, spotsTotal, spotsFilled, gymName, onClick }: GameCardProps) => {
   const skill = skillConfig[skillLevel];
   const spotsLeft = spotsTotal - spotsFilled;
 
   return (
-    <div className="group rounded-lg bg-card border border-border p-5 card-glow transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+    <div onClick={onClick} className="group rounded-lg bg-card border border-border p-5 card-glow transition-all duration-300 hover:-translate-y-1 cursor-pointer">
       <div className="flex items-center justify-between mb-3">
         <span className={`${skill.colorClass} text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider`}>
           {skill.label}
