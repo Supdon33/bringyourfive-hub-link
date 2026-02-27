@@ -215,13 +215,15 @@ const Index = () => {
             <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Featured Gyms</h2>
             <p className="text-muted-foreground">Local courts hosting pickup games</p>
           </div>
-          <button
-            onClick={() => setShowAddGym(true)}
-            className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            Add Gym
-          </button>
+          {user && (
+            <button
+              onClick={() => setShowAddGym(true)}
+              className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Add Gym
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
