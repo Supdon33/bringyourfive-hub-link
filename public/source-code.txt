@@ -1,0 +1,2250 @@
+================================================================================
+BRING YOUR FIVE — FULL SOURCE CODE PRINTOUT
+Generated: 2026-03-01
+================================================================================
+
+
+================================================================================
+FILE: index.html
+================================================================================
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Bring Your 5" />
+    <meta name="theme-color" content="#f97316" />
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <title>Bring Your Five – Find Pickup Basketball Games</title>
+    <meta name="description" content="Connect with local gyms, find pickup basketball games at your skill level, and never miss a run again." />
+    <meta name="author" content="Bring Your Five" />
+
+    <meta property="og:title" content="Bring Your Five – Find Pickup Basketball Games" />
+    <meta property="og:description" content="Connect with local gyms, find pickup basketball games at your skill level, and never miss a run again." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+================================================================================
+FILE: vite.config.ts
+================================================================================
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { componentTagger } from "lovable-tagger";
+import { VitePWA } from "vite-plugin-pwa";
+
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => ({
+  server: {
+    host: "::",
+    port: 8080,
+    hmr: {
+      overlay: false,
+    },
+  },
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+    VitePWA({
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.ico", "placeholder.svg"],
+      workbox: {
+        navigateFallbackDenylist: [/^\/~oauth/],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,jpeg,jpg,woff2}"],
+      },
+      manifest: {
+        name: "Bring Your Five – Find Pickup Basketball Games",
+        short_name: "Bring Your 5",
+        description: "Connect with local gyms, find pickup basketball games at your skill level, and never miss a run again.",
+        theme_color: "#f97316",
+        background_color: "#111318",
+        display: "standalone",
+        orientation: "portrait",
+        scope: "/",
+        start_url: "/",
+        icons: [
+          {
+            src: "/pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+      },
+    }),
+  ].filter(Boolean),
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+}));
+
+
+================================================================================
+FILE: tailwind.config.ts
+================================================================================
+import type { Config } from "tailwindcss";
+
+export default {
+  darkMode: ["class"],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      fontFamily: {
+        display: ["Oswald", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
+        "surface-elevated": "hsl(var(--surface-elevated))",
+        "skill-elementary": "hsl(var(--skill-elementary))",
+        "skill-highschool": "hsl(var(--skill-highschool))",
+        "skill-college": "hsl(var(--skill-college))",
+        "skill-adult": "hsl(var(--skill-adult))",
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
+
+================================================================================
+FILE: src/index.css
+================================================================================
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 40 20% 95%;
+
+    --card: 220 18% 10%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 220 18% 10%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 220 20% 7%;
+
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 220 15% 14%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 25 95% 53%;
+    --accent-foreground: 220 20% 7%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 25 95% 53%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 18% 10%;
+    --sidebar-foreground: 40 20% 95%;
+    --sidebar-primary: 25 95% 53%;
+    --sidebar-primary-foreground: 220 20% 7%;
+    --sidebar-accent: 220 15% 16%;
+    --sidebar-accent-foreground: 40 20% 95%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 25 95% 53%;
+
+    /* Custom tokens */
+    --glow-orange: 25 100% 55%;
+    --surface-elevated: 220 16% 12%;
+    --skill-elementary: 142 70% 45%;
+    --skill-highschool: 200 85% 50%;
+    --skill-college: 280 70% 55%;
+    --skill-adult: 25 95% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 30px hsl(25 95% 53% / 0.4);
+  }
+
+  .bg-gradient-hero {
+    background: linear-gradient(
+      to bottom,
+      hsl(220 20% 7% / 0.3) 0%,
+      hsl(220 20% 7% / 0.7) 50%,
+      hsl(220 20% 7%) 100%
+    );
+  }
+
+  .card-glow {
+    box-shadow: 0 0 0 1px hsl(25 95% 53% / 0.1),
+                0 4px 20px hsl(25 95% 53% / 0.05);
+  }
+
+  .card-glow:hover {
+    box-shadow: 0 0 0 1px hsl(25 95% 53% / 0.3),
+                0 8px 30px hsl(25 95% 53% / 0.1);
+  }
+}
+
+
+================================================================================
+FILE: src/main.tsx
+================================================================================
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+
+createRoot(document.getElementById("root")!).render(<App />);
+
+
+================================================================================
+FILE: src/App.tsx
+================================================================================
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import Index from "./pages/Index";
+import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
+import Install from "./pages/Install";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/install" element={<Install />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
+
+export default App;
+
+
+================================================================================
+FILE: src/pages/Index.tsx
+================================================================================
+import { useState } from "react";
+import { Plus, Menu, LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
+import HeroSection from "@/components/HeroSection";
+import BrandLogo from "@/components/BrandLogo";
+import GameCard, { type SkillLevel } from "@/components/GameCard";
+import SkillFilter from "@/components/SkillFilter";
+import GymCard from "@/components/GymCard";
+import AddGymDialog from "@/components/AddGymDialog";
+import ListRunDialog from "@/components/ListRunDialog";
+import RunDetailDialog from "@/components/RunDetailDialog";
+import ContactUsDialog from "@/components/ContactUsDialog";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/useAuth";
+import { useRuns } from "@/hooks/useRuns";
+import { Lock, Loader2 } from "lucide-react";
+
+const gyms = [
+  { name: "Athletic Republic", address: "6417 Marlboro Pike, District Heights, MD 20747", rating: 5.0, gamesThisWeek: 8 },
+];
+
+const Index = () => {
+  const [selectedSkill, setSelectedSkill] = useState<SkillLevel | "all">("all");
+  const [gymList, setGymList] = useState(gyms);
+  const [showAddGym, setShowAddGym] = useState(false);
+  const [showListRun, setShowListRun] = useState(false);
+  const [selectedRun, setSelectedRun] = useState<{
+    id: string; title: string; gymName: string; location: string;
+    time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
+  } | null>(null);
+  const { user, username, hasActiveSub, loading, signOut } = useAuth();
+
+  const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill);
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="container mx-auto flex items-center justify-between h-16 px-4">
+          <BrandLogo />
+          <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
+            <a href="#runs" className="hover:text-foreground transition-colors">Runs</a>
+            <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
+          </div>
+          <div className="hidden sm:flex items-center gap-3">
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground">
+                  {username || user.user_metadata?.first_name || user.email}
+                </span>
+                <button
+                  onClick={signOut}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors font-semibold"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/auth"
+                  className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="sm:hidden p-2 text-foreground">
+                <Menu className="w-5 h-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64 bg-background border-border">
+              <nav className="flex flex-col gap-6 mt-8">
+                <a href="#runs" className="text-lg font-display text-foreground hover:text-primary transition-colors">Runs</a>
+                <a href="#gyms" className="text-lg font-display text-foreground hover:text-primary transition-colors">Gyms</a>
+                {user ? (
+                  <button
+                    onClick={signOut}
+                    className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all w-full"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <>
+                    <Link to="/auth" className="text-lg font-display text-foreground hover:text-primary transition-colors">Sign In</Link>
+                    <Link to="/auth" className="bg-primary text-primary-foreground font-semibold text-sm px-5 py-2 rounded-lg hover:brightness-110 transition-all w-full text-center">
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
+
+      <HeroSection />
+
+      {/* Games Section */}
+      <section id="runs" className="container mx-auto px-4 py-20">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Available Runs</h2>
+            <p className="text-muted-foreground mt-1">Find a run that matches your level</p>
+          </div>
+          <div className="flex items-center gap-3">
+            {user && (
+              <button
+                onClick={() => setShowListRun(true)}
+                className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                List a Run
+              </button>
+            )}
+            <SkillFilter selected={selectedSkill} onChange={setSelectedSkill} />
+          </div>
+        </div>
+
+        {/* Gated content */}
+        {!loading && !user ? (
+          <div className="text-center py-20 border border-border rounded-lg bg-card">
+            <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="font-display text-2xl text-foreground mb-2">Please Login to see Available Runs</h3>
+            <p className="text-muted-foreground mb-6">
+              Sign in or create an account to view and join runs.
+            </p>
+            <Link
+              to="/auth"
+              className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-3 rounded-lg hover:brightness-110 transition-all"
+            >
+              Sign In
+            </Link>
+          </div>
+        ) : !loading && false ? (
+          <div className="text-center py-20 border border-border rounded-lg bg-card">
+            <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="font-display text-2xl text-foreground mb-2">Subscribers Only</h3>
+            <p className="text-muted-foreground mb-1">
+              {!user
+                ? "Sign up and subscribe to see available runs."
+                : "An active subscription is required to view runs."}
+            </p>
+            <p className="text-muted-foreground text-sm mb-6">
+              Tier 1 (Local): $2.99/mo · Tier 2 (Nationwide): $4.99/mo
+            </p>
+            {!user && (
+              <Link
+                to="/auth"
+                className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-3 rounded-lg hover:brightness-110 transition-all"
+              >
+                Get Started
+              </Link>
+            )}
+          </div>
+        ) : runsLoading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {runs.map((run) => (
+                <GameCard
+                  key={run.id}
+                  title={run.title}
+                  location={run.location}
+                  time={run.time}
+                  skillLevel={run.skill_level as SkillLevel}
+                  spotsTotal={run.spots_total}
+                  spotsFilled={run.spots_filled}
+                  gymName={run.gym_name}
+                  onClick={() => setSelectedRun({
+                    id: run.id,
+                    title: run.title,
+                    gymName: run.gym_name,
+                    location: run.location,
+                    time: run.time,
+                    skillLevel: run.skill_level as SkillLevel,
+                    spotsTotal: run.spots_total,
+                    spotsFilled: run.spots_filled,
+                  })}
+                />
+              ))}
+            </div>
+
+            {runs.length === 0 && (
+              <div className="text-center py-16 text-muted-foreground">
+                <p className="text-lg">No games at this level right now.</p>
+                <p className="text-sm mt-1">Check back soon or try another skill level.</p>
+              </div>
+            )}
+          </>
+        )}
+
+        <p className="text-muted-foreground text-xs mt-6 italic">
+          * Some facilities may have an entry fee.
+        </p>
+      </section>
+
+      {/* Gyms Section */}
+      <section id="gyms" className="container mx-auto px-4 pb-20">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Featured Gyms</h2>
+            <p className="text-muted-foreground">Local courts hosting pickup games</p>
+          </div>
+          {user && (
+            <button
+              onClick={() => setShowAddGym(true)}
+              className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Add Gym
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {gymList.map((gym, i) => (
+            <GymCard key={i} {...gym} />
+          ))}
+        </div>
+      </section>
+
+      <AddGymDialog
+        open={showAddGym}
+        onClose={() => setShowAddGym(false)}
+        onAdd={(gym) => setGymList((prev) => [...prev, gym])}
+      />
+
+      <ListRunDialog
+        open={showListRun}
+        onClose={() => setShowListRun(false)}
+        onAdded={() => {}}
+      />
+
+      <RunDetailDialog
+        open={!!selectedRun}
+        onClose={() => setSelectedRun(null)}
+        run={selectedRun}
+      />
+
+      <ContactUsDialog />
+
+      {/* Footer */}
+      <footer className="border-t border-border py-10">
+        <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
+          <BrandLogo size="small" />
+          <p className="mt-2">Connecting ballers with courts since 2025.</p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Index;
+
+
+================================================================================
+FILE: src/pages/Auth.tsx
+================================================================================
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import BrandLogo from "@/components/BrandLogo";
+import ForgotPasswordDialog from "@/components/ForgotPasswordDialog";
+import { useToast } from "@/hooks/use-toast";
+
+const US_STATES = [
+  "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware",
+  "District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa",
+  "Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota",
+  "Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey",
+  "New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon",
+  "Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah",
+  "Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"
+];
+
+const Auth = () => {
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Sign In state
+  const [signInUsername, setSignInUsername] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+
+  // Sign Up state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [cellPhone, setCellPhone] = useState("");
+  const [homeState, setHomeState] = useState("");
+  const [birthMonth, setBirthMonth] = useState("");
+  const [birthYear, setBirthYear] = useState("");
+  const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Look up email by username
+    const { data: profile, error: lookupError } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq("username", signInUsername)
+      .maybeSingle();
+
+    if (lookupError || !profile) {
+      setLoading(false);
+      toast({ title: "Sign in failed", description: "Username not found.", variant: "destructive" });
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: profile.email,
+      password: signInPassword,
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName || !lastName || !username || !email || !password) {
+      toast({ title: "Missing fields", description: "Please fill all required fields.", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          username,
+          account_type: accountType,
+          cell_phone: cellPhone || null,
+          birth_month: birthMonth ? parseInt(birthMonth) : null,
+          birth_year: birthYear ? parseInt(birthYear) : null,
+          home_state: homeState || null,
+        },
+      },
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Check your email", description: "We sent a verification link to your email address." });
+      // Fire-and-forget HubSpot sync
+      supabase.functions.invoke("sync-hubspot-contact", {
+        body: { email, firstName, lastName, cellPhone, homeState },
+      }).catch(() => {});
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="flex justify-center mb-8">
+          <BrandLogo />
+        </div>
+
+        {/* Tabs */}
+        <div className="flex mb-6 border-b border-border">
+          <button
+            onClick={() => setMode("signin")}
+            className={`flex-1 pb-3 text-center font-display text-lg tracking-wider transition-colors ${
+              mode === "signin" ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => setMode("signup")}
+            className={`flex-1 pb-3 text-center font-display text-lg tracking-wider transition-colors ${
+              mode === "signup" ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
+            }`}
+          >
+            Sign Up
+          </button>
+        </div>
+
+        {mode === "signin" ? (
+          <form onSubmit={handleSignIn} className="space-y-4">
+            <div>
+              <Label htmlFor="signin-username">Username</Label>
+              <Input id="signin-username" type="text" value={signInUsername} onChange={(e) => setSignInUsername(e.target.value)} required />
+            </div>
+            <div>
+              <Label htmlFor="signin-password">Password</Label>
+              <Input id="signin-password" type="password" value={signInPassword} onChange={(e) => setSignInPassword(e.target.value)} required />
+            </div>
+            <div className="flex justify-end">
+              <ForgotPasswordDialog />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing in…" : "Sign In"}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={handleSignUp} className="space-y-4">
+            {/* Account Type Selection */}
+            <div className="space-y-2">
+              <Label>I am signing up as *</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setAccountType("individual")}
+                  className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                    accountType === "individual"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="text-2xl">🏀</span>
+                  <span className="font-display text-sm tracking-wider">Individual</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAccountType("gym")}
+                  className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
+                    accountType === "gym"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="text-2xl">🏟️</span>
+                  <span className="font-display text-sm tracking-wider">Gym</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="firstName">{accountType === "gym" ? "Contact First Name *" : "First Name *"}</Label>
+                <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+              </div>
+              <div>
+                <Label htmlFor="lastName">{accountType === "gym" ? "Contact Last Name *" : "Last Name *"}</Label>
+                <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="username">Username *</Label>
+              <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            </div>
+            <div>
+              <Label htmlFor="email">Email Address *</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div>
+              <Label htmlFor="password">Password *</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            </div>
+            <div>
+              <Label htmlFor="cellPhone">Cell Phone</Label>
+              <Input id="cellPhone" type="tel" value={cellPhone} onChange={(e) => setCellPhone(e.target.value)} />
+            </div>
+            {accountType === "individual" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="birthMonth">Birth Month</Label>
+                <select
+                  id="birthMonth"
+                  value={birthMonth}
+                  onChange={(e) => setBirthMonth(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="">Month…</option>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                    <option key={m} value={m}>{new Date(2000, m - 1).toLocaleString('default', { month: 'long' })}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="birthYear">Birth Year</Label>
+                <select
+                  id="birthYear"
+                  value={birthYear}
+                  onChange={(e) => setBirthYear(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="">Year…</option>
+                  {Array.from({ length: 80 }, (_, i) => new Date().getFullYear() - i).map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            )}
+            <div>
+              <Label htmlFor="homeState">Home State</Label>
+              <select
+                id="homeState"
+                value={homeState}
+                onChange={(e) => setHomeState(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="">Select state…</option>
+                {US_STATES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating account…" : "Sign Up"}
+            </Button>
+          </form>
+        )}
+
+        <div className="mt-6 text-center">
+          <a href="/" className="text-muted-foreground text-sm hover:text-foreground transition-colors">
+            ← Back to home
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Auth;
+
+
+================================================================================
+FILE: src/pages/ResetPassword.tsx
+================================================================================
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import BrandLogo from "@/components/BrandLogo";
+import { useToast } from "@/hooks/use-toast";
+
+const ResetPassword = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Supabase sets session from the URL hash automatically
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setReady(true);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast({ title: "Passwords don't match", variant: "destructive" });
+      return;
+    }
+    if (password.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({ password });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Password updated!", description: "You can now sign in with your new password." });
+      navigate("/auth");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="flex justify-center mb-8">
+          <BrandLogo />
+        </div>
+        <h1 className="font-display text-2xl tracking-wider text-center mb-6">Reset Password</h1>
+
+        {!ready ? (
+          <p className="text-muted-foreground text-center text-sm">
+            Verifying your reset link… If nothing happens, the link may have expired.{" "}
+            <a href="/auth" className="text-primary underline">Request a new one</a>.
+          </p>
+        ) : (
+          <form onSubmit={handleReset} className="space-y-4">
+            <div>
+              <Label htmlFor="new-password">New Password</Label>
+              <Input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            </div>
+            <div>
+              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={6} />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Updating…" : "Update Password"}
+            </Button>
+          </form>
+        )}
+
+        <div className="mt-6 text-center">
+          <a href="/auth" className="text-muted-foreground text-sm hover:text-foreground transition-colors">
+            ← Back to sign in
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResetPassword;
+
+
+================================================================================
+FILE: src/pages/Install.tsx
+================================================================================
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Download, CheckCircle, Smartphone, Share } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
+const Install = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    setIsIOS(/iPad|iPhone|iPod/.test(ua));
+
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setIsInstalled(true);
+    }
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", () => setIsInstalled(true));
+
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") setIsInstalled(true);
+    setDeferredPrompt(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="max-w-md w-full text-center space-y-8">
+        <div className="space-y-2">
+          <Smartphone className="w-16 h-16 mx-auto text-primary" />
+          <h1 className="text-3xl font-bold text-foreground">Install Bring Your 5</h1>
+          <p className="text-muted-foreground">
+            Add the app to your home screen for the best experience — quick access, offline support, and a native feel.
+          </p>
+        </div>
+
+        {isInstalled ? (
+          <div className="space-y-4">
+            <CheckCircle className="w-12 h-12 mx-auto text-accent" />
+            <p className="text-foreground font-medium">App is already installed!</p>
+            <Button onClick={() => navigate("/")} className="w-full">
+              Open App
+            </Button>
+          </div>
+        ) : isIOS ? (
+          <div className="bg-card border border-border rounded-xl p-6 text-left space-y-4">
+            <p className="text-foreground font-semibold">To install on iPhone / iPad:</p>
+            <ol className="space-y-3 text-muted-foreground text-sm">
+              <li className="flex items-start gap-3">
+                <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                <span>Tap the <Share className="inline w-4 h-4 -mt-0.5" /> <strong>Share</strong> button in Safari</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                <span>Scroll down and tap <strong>"Add to Home Screen"</strong></span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                <span>Tap <strong>"Add"</strong> to confirm</span>
+              </li>
+            </ol>
+          </div>
+        ) : deferredPrompt ? (
+          <Button onClick={handleInstall} size="lg" className="w-full gap-2">
+            <Download className="w-5 h-5" />
+            Install App
+          </Button>
+        ) : (
+          <div className="bg-card border border-border rounded-xl p-6 text-left space-y-4">
+            <p className="text-foreground font-semibold">To install:</p>
+            <p className="text-muted-foreground text-sm">
+              Open your browser menu (⋮) and tap <strong>"Install app"</strong> or <strong>"Add to Home Screen"</strong>.
+            </p>
+          </div>
+        )}
+
+        <Button variant="ghost" onClick={() => navigate("/")} className="text-muted-foreground">
+          Back to App
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default Install;
+
+
+================================================================================
+FILE: src/pages/NotFound.tsx
+================================================================================
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
+const NotFound = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+  }, [location.pathname]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-muted">
+      <div className="text-center">
+        <h1 className="mb-4 text-4xl font-bold">404</h1>
+        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
+        <a href="/" className="text-primary underline hover:text-primary/90">
+          Return to Home
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export default NotFound;
+
+
+================================================================================
+FILE: src/components/HeroSection.tsx
+================================================================================
+import heroImage from "@/assets/hero-court.jpg";
+import logoImage from "@/assets/bring-your-five-logo.jpeg";
+
+const HeroSection = () => {
+  return (
+    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+      <img
+        src={heroImage}
+        alt="Basketball court at night"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-hero" />
+
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+        <p className="text-primary font-semibold tracking-[0.3em] uppercase text-sm mb-6 animate-pulse-glow">
+          Find Your Next Game
+        </p>
+
+        <img
+          src={logoImage}
+          alt="Bring Your Five logo"
+          className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 drop-shadow-2xl mb-8 rounded-full object-cover"
+        />
+
+        <p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-8">
+          Connect with local gyms, find pickup games at your skill level, and never miss a run again.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#runs" className="bg-primary text-primary-foreground font-display text-lg px-8 py-4 rounded-lg hover:brightness-110 transition-all duration-200 tracking-wider">
+            Available Runs
+          </a>
+          <a href="#gyms" className="border border-border text-foreground font-display text-lg px-8 py-4 rounded-lg hover:bg-secondary transition-all duration-200 tracking-wider">
+            List Your Gym
+          </a>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+    </section>
+  );
+};
+
+export default HeroSection;
+
+
+================================================================================
+FILE: src/components/GameCard.tsx
+================================================================================
+import { MapPin, Clock, Users } from "lucide-react";
+
+export type SkillLevel = "elementary" | "highschool" | "college" | "adult";
+
+interface GameCardProps {
+  title: string;
+  location: string;
+  time: string;
+  skillLevel: SkillLevel;
+  spotsTotal: number;
+  spotsFilled: number;
+  gymName: string;
+  onClick?: () => void;
+}
+
+const skillConfig: Record<SkillLevel, { label: string; colorClass: string }> = {
+  elementary: { label: "Elementary", colorClass: "bg-skill-elementary" },
+  highschool: { label: "High School", colorClass: "bg-skill-highschool" },
+  college: { label: "College", colorClass: "bg-skill-college" },
+  adult: { label: "Adult", colorClass: "bg-skill-adult" },
+};
+
+const GameCard = ({ title, location, time, skillLevel, spotsTotal, spotsFilled, gymName, onClick }: GameCardProps) => {
+  const skill = skillConfig[skillLevel];
+  const spotsLeft = spotsTotal - spotsFilled;
+
+  return (
+    <div onClick={onClick} className="group rounded-lg bg-card border border-border p-5 card-glow transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+      <div className="flex items-center justify-between mb-3">
+        <span className={`${skill.colorClass} text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider`}>
+          {skill.label}
+        </span>
+      </div>
+
+      <h3 className="font-display text-xl text-foreground mb-1">{title}</h3>
+      <p className="text-muted-foreground text-sm mb-4">{gymName}</p>
+
+      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <MapPin className="w-4 h-4 text-primary" />
+          {location}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Clock className="w-4 h-4 text-primary" />
+          {time}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Users className="w-4 h-4 text-primary" />
+          {spotsFilled}/{spotsTotal}
+        </span>
+      </div>
+
+      <div className="mt-4 w-full bg-secondary rounded-full h-1.5">
+        <div
+          className="bg-primary h-1.5 rounded-full transition-all duration-500"
+          style={{ width: `${(spotsFilled / spotsTotal) * 100}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default GameCard;
+
+
+================================================================================
+FILE: src/components/GymCard.tsx
+================================================================================
+import { MapPin, Star } from "lucide-react";
+
+interface GymCardProps {
+  name: string;
+  address: string;
+  rating: number;
+  gamesThisWeek: number;
+  imageUrl?: string;
+}
+
+const GymCard = ({ name, address, rating, gamesThisWeek }: GymCardProps) => {
+  return (
+    <div className="group rounded-lg bg-card border border-border p-5 card-glow transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+      <div className="w-full h-32 bg-secondary rounded-md mb-4 flex items-center justify-center overflow-hidden">
+        <span className="text-4xl">🏀</span>
+      </div>
+
+      <h3 className="font-display text-lg text-foreground mb-1">{name}</h3>
+
+      <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
+        <MapPin className="w-3.5 h-3.5 text-primary" />
+        {address}
+      </div>
+
+      <div className="flex items-center justify-between text-sm">
+        <span className="flex items-center gap-1 text-primary">
+          <Star className="w-3.5 h-3.5 fill-primary" />
+          {rating.toFixed(1)}
+        </span>
+        <span className="text-muted-foreground">
+          {gamesThisWeek} game{gamesThisWeek !== 1 ? "s" : ""} this week
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export default GymCard;
+
+
+================================================================================
+FILE: src/components/AddGymDialog.tsx
+================================================================================
+import { useState } from "react";
+import { MapPin, Plus, X } from "lucide-react";
+import { z } from "zod";
+
+const gymSchema = z.object({
+  name: z.string().trim().min(1, "Gym name is required").max(100, "Name too long"),
+  address: z.string().trim().min(1, "Address is required").max(200, "Address too long"),
+});
+
+interface AddGymDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onAdd: (gym: { name: string; address: string; rating: number; gamesThisWeek: number }) => void;
+}
+
+const AddGymDialog = ({ open, onClose, onAdd }: AddGymDialogProps) => {
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; address?: string }>({});
+
+  if (!open) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = gymSchema.safeParse({ name, address });
+    if (!result.success) {
+      const fieldErrors: { name?: string; address?: string } = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as "name" | "address";
+        fieldErrors[field] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+    onAdd({ name: result.data.name, address: result.data.address, rating: 0, gamesThisWeek: 0 });
+    setName("");
+    setAddress("");
+    setErrors({});
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-display text-2xl text-foreground">Add a Gym</h3>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Gym Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => { setName(e.target.value); setErrors((p) => ({ ...p, name: undefined })); }}
+              placeholder="e.g. Downtown Recreation Center"
+              maxLength={100}
+              className="w-full bg-secondary text-foreground border border-border rounded-lg px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+            />
+            {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Address</label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => { setAddress(e.target.value); setErrors((p) => ({ ...p, address: undefined })); }}
+                placeholder="e.g. 123 Main St, City"
+                maxLength={200}
+                className="w-full bg-secondary text-foreground border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              />
+            </div>
+            {errors.address && <p className="text-destructive text-xs mt-1">{errors.address}</p>}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-primary text-primary-foreground font-display text-base py-3 rounded-lg hover:brightness-110 transition-all tracking-wider mt-2"
+          >
+            Add Gym
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default AddGymDialog;
+
+
+================================================================================
+FILE: src/components/ListRunDialog.tsx
+================================================================================
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { RUNS_QUERY_KEY } from "@/hooks/useRuns";
+import type { SkillLevel } from "@/components/GameCard";
+
+interface ListRunDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onAdded: () => void;
+}
+
+const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [gymName, setGymName] = useState("");
+  const [time, setTime] = useState("");
+  const [skillLevel, setSkillLevel] = useState<SkillLevel>("adult");
+  const [spotsTotal, setSpotsTotal] = useState(10);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    setLoading(true);
+    const { error } = await supabase.from("runs").insert({
+      user_id: user.id,
+      title,
+      location,
+      gym_name: gymName,
+      time,
+      skill_level: skillLevel,
+      spots_total: spotsTotal,
+      spots_filled: 0,
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Run listed!" });
+      setTitle(""); setLocation(""); setGymName(""); setTime(""); setSpotsTotal(10);
+      queryClient.invalidateQueries({ queryKey: RUNS_QUERY_KEY });
+      onAdded();
+      onClose();
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="bg-card border-border">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl">List a Run</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label>Title</Label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. 5v5 Open Run" required />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Location</Label>
+              <Input value={location} onChange={(e) => setLocation(e.target.value)} required />
+            </div>
+            <div>
+              <Label>Gym</Label>
+              <Input value={gymName} onChange={(e) => setGymName(e.target.value)} placeholder="e.g. Athletic Republic" required />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Time</Label>
+              <Input value={time} onChange={(e) => setTime(e.target.value)} placeholder="e.g. 6:00 PM" required />
+            </div>
+            <div>
+              <Label>Total Spots</Label>
+              <Input type="number" value={spotsTotal} onChange={(e) => setSpotsTotal(Number(e.target.value))} min={2} required />
+            </div>
+          </div>
+          <div>
+            <Label>Skill Level</Label>
+            <select
+              value={skillLevel}
+              onChange={(e) => setSkillLevel(e.target.value as SkillLevel)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <option value="elementary">Elementary</option>
+              <option value="highschool">High School</option>
+              <option value="college">College</option>
+              <option value="adult">Adult</option>
+            </select>
+          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Listing…" : "List Run"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ListRunDialog;
+
+
+================================================================================
+FILE: src/components/RunDetailDialog.tsx
+================================================================================
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useRunParticipants, useJoinRun, useLeaveRun } from "@/hooks/useRunParticipants";
+import { Users, UserPlus, UserMinus, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import type { SkillLevel } from "@/components/GameCard";
+
+interface RunDetailDialogProps {
+  open: boolean;
+  onClose: () => void;
+  run: {
+    id: string;
+    title: string;
+    gymName: string;
+    location: string;
+    time: string;
+    skillLevel: SkillLevel;
+    spotsTotal: number;
+    spotsFilled: number;
+  } | null;
+}
+
+const skillLabels: Record<SkillLevel, string> = {
+  elementary: "Elementary",
+  highschool: "High School",
+  college: "College",
+  adult: "Adult",
+};
+
+const RunDetailDialog = ({ open, onClose, run }: RunDetailDialogProps) => {
+  const { user, username } = useAuth();
+  const { toast } = useToast();
+  const { data: participants = [], isLoading } = useRunParticipants(run?.id ?? "");
+  const joinRun = useJoinRun();
+  const leaveRun = useLeaveRun();
+
+  if (!run) return null;
+
+  const alreadyJoined = participants.some((p) => p.user_id === user?.id);
+  const spotsLeft = run.spotsTotal - run.spotsFilled;
+  const isFull = spotsLeft <= 0;
+
+  const handleJoin = async () => {
+    if (!user) return;
+    const displayName = username || user.user_metadata?.first_name || user.email || "Player";
+    try {
+      await joinRun.mutateAsync({ runId: run.id, userId: user.id, displayName });
+      toast({ title: "You're in!", description: "You joined the run." });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    }
+  };
+
+  const handleLeave = async () => {
+    if (!user) return;
+    try {
+      await leaveRun.mutateAsync({ runId: run.id, userId: user.id });
+      toast({ title: "Left run", description: "You left the run." });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    }
+  };
+
+  // Build slot list
+  const slots = Array.from({ length: run.spotsTotal }, (_, i) => {
+    const participant = participants[i];
+    return participant ? participant.display_name : null;
+  });
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="bg-card border-border max-w-md">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl">{run.title}</DialogTitle>
+          <p className="text-muted-foreground text-sm">
+            {run.gymName} · {run.location} · {run.time} · {skillLabels[run.skillLevel]}
+          </p>
+        </DialogHeader>
+
+        <div className="mt-2">
+          <div className="flex items-center gap-2 mb-3">
+            <Users className="w-5 h-5 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              Player Roster ({run.spotsFilled}/{run.spotsTotal})
+            </span>
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center py-6">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <ol className="space-y-1.5">
+              {slots.map((name, i) => (
+                <li
+                  key={i}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
+                    name
+                      ? "bg-primary/10 text-foreground"
+                      : "bg-secondary/50 text-muted-foreground italic"
+                  }`}
+                >
+                  <span className="font-mono text-xs w-5 text-right text-muted-foreground">
+                    {i + 1}.
+                  </span>
+                  {name ?? "Open Spot"}
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+
+        {user && (
+          <div className="mt-4">
+            {alreadyJoined ? (
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleLeave}
+                disabled={leaveRun.isPending}
+              >
+                <UserMinus className="w-4 h-4 mr-2" />
+                {leaveRun.isPending ? "Leaving…" : "Leave Run"}
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                onClick={handleJoin}
+                disabled={isFull || joinRun.isPending}
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                {joinRun.isPending ? "Joining…" : isFull ? "Run Full" : "Join Run"}
+              </Button>
+            )}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default RunDetailDialog;
+
+
+================================================================================
+FILE: src/components/ContactUsDialog.tsx
+================================================================================
+import { useState } from "react";
+import { MessageSquare } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+const ContactUsDialog = () => {
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSend = () => {
+    const mailtoLink = `mailto:coach.bringyour5@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    window.open(mailtoLink, "_blank");
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-3 rounded-full shadow-lg hover:brightness-110 transition-all">
+          <MessageSquare className="w-4 h-4" />
+          Contact Us
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Contact Us</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 mt-2">
+          <div className="space-y-2">
+            <Label htmlFor="subject">Subject</Label>
+            <Input
+              id="subject"
+              placeholder="What's this about?"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="message">Message</Label>
+            <Textarea
+              id="message"
+              placeholder="Write your message..."
+              rows={5}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          </div>
+          <Button onClick={handleSend} className="w-full" disabled={!subject.trim() || !message.trim()}>
+            Send Email
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ContactUsDialog;
+
+
+================================================================================
+FILE: src/components/SkillFilter.tsx
+================================================================================
+import type { SkillLevel } from "./GameCard";
+
+interface SkillFilterProps {
+  selected: SkillLevel | "all";
+  onChange: (level: SkillLevel | "all") => void;
+}
+
+const filters: { value: SkillLevel | "all"; label: string; dot?: string }[] = [
+  { value: "all", label: "All Levels" },
+  { value: "elementary", label: "Elementary", dot: "bg-skill-elementary" },
+  { value: "highschool", label: "High School", dot: "bg-skill-highschool" },
+  { value: "college", label: "College", dot: "bg-skill-college" },
+  { value: "adult", label: "Adult", dot: "bg-skill-adult" },
+];
+
+const SkillFilter = ({ selected, onChange }: SkillFilterProps) => {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {filters.map((f) => (
+        <button
+          key={f.value}
+          onClick={() => onChange(f.value)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+            selected === f.value
+              ? "bg-primary text-primary-foreground border-primary"
+              : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
+          }`}
+        >
+          {f.dot && <span className={`w-2 h-2 rounded-full ${f.dot}`} />}
+          {f.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export default SkillFilter;
+
+
+================================================================================
+FILE: src/components/BrandLogo.tsx
+================================================================================
+import logoImage from "@/assets/bring-your-five-logo.jpeg";
+
+const BrandLogo = ({ size = "default" }: { size?: "default" | "small" }) => {
+  const imgClass = size === "small" ? "w-8 h-8" : "w-10 h-10";
+  const textClass = size === "small" ? "text-lg" : "text-2xl";
+
+  return (
+    <span className={`font-display ${textClass} tracking-wider inline-flex items-center gap-2`}>
+      <img src={logoImage} alt="Bring Your Five" className={`${imgClass} rounded-full object-cover`} />
+      <span className="text-foreground">Bring Your</span>
+      <span className="text-2xl">🖐🏿</span>
+    </span>
+  );
+};
+
+export default BrandLogo;
+
+
+================================================================================
+FILE: src/components/BasketballLogo.tsx
+================================================================================
+const BasketballLogo = ({ className = "" }: { className?: string }) => {
+  return (
+    <svg
+      viewBox="0 0 400 520"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* "BRING YOUR" arched above the basketball */}
+      <defs>
+        <path
+          id="topArc"
+          d="M40 200 A190 190 0 0 1 360 200"
+        />
+        <path
+          id="bottomArc"
+          d="M60 330 A175 175 0 0 0 340 330"
+        />
+      </defs>
+      <text
+        fill="hsl(40, 20%, 95%)"
+        fontSize="40"
+        fontFamily="Oswald, sans-serif"
+        fontWeight="700"
+        letterSpacing="10"
+        textAnchor="middle"
+      >
+        <textPath href="#topArc" startOffset="50%">
+          BRING YOUR
+        </textPath>
+      </text>
+
+      {/* Basketball circle */}
+      <circle
+        cx="200"
+        cy="260"
+        r="120"
+        fill="hsl(25, 85%, 45%)"
+        stroke="hsl(25, 60%, 25%)"
+        strokeWidth="5"
+      />
+
+      {/* Basketball seam lines */}
+      <path d="M200 140 Q200 260 200 380" fill="none" stroke="hsl(25, 60%, 25%)" strokeWidth="3" />
+      <path d="M80 260 Q200 260 320 260" fill="none" stroke="hsl(25, 60%, 25%)" strokeWidth="3" />
+      <path d="M145 150 Q110 260 145 370" fill="none" stroke="hsl(25, 60%, 25%)" strokeWidth="3" />
+      <path d="M255 150 Q290 260 255 370" fill="none" stroke="hsl(25, 60%, 25%)" strokeWidth="3" />
+
+      {/* Hand emoji centered */}
+      <text
+        x="200"
+        y="270"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="85"
+        role="img"
+        aria-label="high five hand"
+      >
+        🖐️
+      </text>
+
+      {/* "FIVE" arched below the basketball */}
+      <text
+        fill="hsl(40, 20%, 95%)"
+        fontSize="46"
+        fontFamily="Oswald, sans-serif"
+        fontWeight="700"
+        letterSpacing="16"
+        textAnchor="middle"
+      >
+        <textPath href="#bottomArc" startOffset="50%">
+          FIVE
+        </textPath>
+      </text>
+    </svg>
+  );
+};
+
+export default BasketballLogo;
+
+
+================================================================================
+FILE: src/components/NavLink.tsx
+================================================================================
+import { NavLink as RouterNavLink, NavLinkProps } from "react-router-dom";
+import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+
+interface NavLinkCompatProps extends Omit<NavLinkProps, "className"> {
+  className?: string;
+  activeClassName?: string;
+  pendingClassName?: string;
+}
+
+const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
+  ({ className, activeClassName, pendingClassName, to, ...props }, ref) => {
+    return (
+      <RouterNavLink
+        ref={ref}
+        to={to}
+        className={({ isActive, isPending }) =>
+          cn(className, isActive && activeClassName, isPending && pendingClassName)
+        }
+        {...props}
+      />
+    );
+  },
+);
+
+NavLink.displayName = "NavLink";
+
+export { NavLink };
+
+
+================================================================================
+FILE: src/components/ForgotPasswordDialog.tsx
+================================================================================
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+const ForgotPasswordDialog = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Check your email", description: "We sent a password reset link to your email." });
+      setOpen(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <button type="button" className="text-sm text-primary hover:underline">
+          Forgot password?
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="font-display tracking-wider">Reset Password</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="reset-email">Email Address</Label>
+            <Input id="reset-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Enter your account email" />
+          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Sending…" : "Send Reset Link"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ForgotPasswordDialog;
+
+
+================================================================================
+FILE: src/hooks/useAuth.tsx
+================================================================================
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
+import type { User, Session } from "@supabase/supabase-js";
+
+interface Subscription {
+  tier: "tier1" | "tier2" | "gym_listing";
+  status: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  username: string | null;
+  subscriptions: Subscription[];
+  hasActiveSub: boolean;
+  hasTier: (tier: "tier1" | "tier2" | "gym_listing") => boolean;
+  signOut: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          const [{ data: subs }, { data: profile }] = await Promise.all([
+            supabase.from("subscriptions").select("tier, status").eq("user_id", session.user.id).eq("status", "active"),
+            supabase.from("profiles").select("username").eq("user_id", session.user.id).single(),
+          ]);
+          setSubscriptions((subs as Subscription[]) || []);
+          setUsername(profile?.username ?? null);
+        } else {
+          setSubscriptions([]);
+          setUsername(null);
+        }
+        setLoading(false);
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        Promise.all([
+          supabase.from("subscriptions").select("tier, status").eq("user_id", session.user.id).eq("status", "active"),
+          supabase.from("profiles").select("username").eq("user_id", session.user.id).single(),
+        ]).then(([{ data: subs }, { data: profile }]) => {
+          setSubscriptions((subs as Subscription[]) || []);
+          setUsername(profile?.username ?? null);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => authListener.unsubscribe();
+  }, []);
+
+  const hasActiveSub = subscriptions.length > 0;
+
+  const hasTier = (tier: "tier1" | "tier2" | "gym_listing") =>
+    subscriptions.some((s) => s.tier === tier && s.status === "active");
+
+  const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
+    window.location.replace("/");
+  }, []);
+
+  useInactivityTimeout(signOut, !!user);
+
+  return (
+    <AuthContext.Provider value={{ user, session, loading, username, subscriptions, hasActiveSub, hasTier, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  return context;
+};
+
+
+================================================================================
+FILE: src/hooks/useRuns.ts
+================================================================================
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { SkillLevel } from "@/components/GameCard";
+
+export const RUNS_QUERY_KEY = ["runs"];
+
+export interface Run {
+  id: string;
+  title: string;
+  location: string;
+  time: string;
+  skill_level: string;
+  spots_total: number;
+  spots_filled: number;
+  gym_name: string;
+}
+
+export const useRuns = (skillFilter: SkillLevel | "all" = "all") => {
+  return useQuery({
+    queryKey: [...RUNS_QUERY_KEY, skillFilter],
+    queryFn: async () => {
+      let query = supabase
+        .from("runs")
+        .select("id, title, location, time, skill_level, spots_total, spots_filled, gym_name")
+        .order("created_at", { ascending: false });
+
+      if (skillFilter !== "all") {
+        query = query.eq("skill_level", skillFilter);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return (data ?? []) as Run[];
+    },
+  });
+};
+
+
+================================================================================
+FILE: src/hooks/useRunParticipants.ts
+================================================================================
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { RUNS_QUERY_KEY } from "@/hooks/useRuns";
+
+export interface RunParticipant {
+  id: string;
+  run_id: string;
+  user_id: string;
+  display_name: string;
+  joined_at: string;
+}
+
+export const useRunParticipants = (runId: string) => {
+  return useQuery({
+    queryKey: ["run_participants", runId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("run_participants")
+        .select("*")
+        .eq("run_id", runId)
+        .order("joined_at", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as RunParticipant[];
+    },
+    enabled: !!runId,
+  });
+};
+
+export const useJoinRun = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      runId,
+      userId,
+      displayName,
+    }: {
+      runId: string;
+      userId: string;
+      displayName: string;
+    }) => {
+      // Insert participant
+      const { error: joinError } = await supabase
+        .from("run_participants")
+        .insert({ run_id: runId, user_id: userId, display_name: displayName });
+      if (joinError) throw joinError;
+
+      // Increment spots_filled
+      const { error: updateError } = await supabase.rpc("increment_spots_filled" as any, { run_id_input: runId });
+      if (updateError) throw updateError;
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["run_participants", variables.runId] });
+      queryClient.invalidateQueries({ queryKey: RUNS_QUERY_KEY });
+    },
+  });
+};
+
+export const useLeaveRun = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ runId, userId }: { runId: string; userId: string }) => {
+      const { error: leaveError } = await supabase
+        .from("run_participants")
+        .delete()
+        .eq("run_id", runId)
+        .eq("user_id", userId);
+      if (leaveError) throw leaveError;
+
+      const { error: updateError } = await supabase.rpc("decrement_spots_filled" as any, { run_id_input: runId });
+      if (updateError) throw updateError;
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["run_participants", variables.runId] });
+      queryClient.invalidateQueries({ queryKey: RUNS_QUERY_KEY });
+    },
+  });
+};
+
+
+================================================================================
+FILE: src/hooks/useInactivityTimeout.ts
+================================================================================
+import { useEffect, useRef, useCallback } from "react";
+
+const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+
+const ACTIVITY_EVENTS: (keyof DocumentEventMap)[] = [
+  "mousedown",
+  "mousemove",
+  "keydown",
+  "scroll",
+  "touchstart",
+  "click",
+];
+
+export function useInactivityTimeout(onTimeout: () => void, enabled: boolean) {
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(onTimeout, INACTIVITY_TIMEOUT);
+  }, [onTimeout]);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    resetTimer();
+
+    ACTIVITY_EVENTS.forEach((event) =>
+      document.addEventListener(event, resetTimer, { passive: true })
+    );
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      ACTIVITY_EVENTS.forEach((event) =>
+        document.removeEventListener(event, resetTimer)
+      );
+    };
+  }, [enabled, resetTimer]);
+}
+
+
+================================================================================
+END OF SOURCE CODE PRINTOUT
+================================================================================
