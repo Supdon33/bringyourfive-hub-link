@@ -16,11 +16,14 @@ const HeroSection = () => {
           Find Your Next Game
         </p>
 
-        <img
-          src={logoImage}
-          alt="Bring Your Five logo"
-          className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 drop-shadow-2xl mb-8 rounded-full object-cover"
-        />
+        <div className="relative inline-block mb-8">
+          <img
+            src={logoImage}
+            alt="Bring Your Five logo"
+            className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 drop-shadow-2xl rounded-full object-cover"
+          />
+          <span className="absolute bottom-2 right-2 text-foreground/70 text-xs font-semibold">™</span>
+        </div>
 
         <p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-8">
           Connect with local gyms, find pickup games at your skill level, and never miss a run again.

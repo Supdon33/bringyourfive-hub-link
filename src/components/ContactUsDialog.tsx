@@ -5,14 +5,18 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const ContactUsDialog = () => {
+interface ContactUsDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+const ContactUsDialog = ({ open, onOpenChange }: ContactUsDialogProps) => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
@@ -22,13 +26,7 @@ const ContactUsDialog = () => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-3 rounded-full shadow-lg hover:brightness-110 transition-all">
-          <MessageSquare className="w-4 h-4" />
-          Contact Us
-        </button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Contact Us</DialogTitle>
