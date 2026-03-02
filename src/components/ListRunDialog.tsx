@@ -25,7 +25,7 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
   const [location, setLocation] = useState("");
   const [gymName, setGymName] = useState("");
   const [time, setTime] = useState("");
-  const [skillLevel, setSkillLevel] = useState<SkillLevel>("adult");
+  const [skillLevel, setSkillLevel] = useState<SkillLevel>("adult_male");
   const [spotsTotal, setSpotsTotal] = useState(10);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -95,8 +95,10 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
               <option value="elementary">Elementary</option>
               <option value="highschool_male">High School Male</option>
               <option value="highschool_female">High School Female</option>
-              <option value="college">College</option>
-              <option value="adult">Adult</option>
+              <option value="college_male">College Male</option>
+              <option value="college_female">College Female</option>
+              <option value="adult_male">Adult Male</option>
+              <option value="adult_female">Adult Female</option>
             </select>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>

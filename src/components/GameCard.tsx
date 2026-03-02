@@ -1,6 +1,6 @@
 import { MapPin, Clock, Users } from "lucide-react";
 
-export type SkillLevel = "elementary" | "highschool_male" | "highschool_female" | "college" | "adult";
+export type SkillLevel = "elementary" | "highschool_male" | "highschool_female" | "college_male" | "college_female" | "adult_male" | "adult_female";
 
 interface GameCardProps {
   title: string;
@@ -15,10 +15,12 @@ interface GameCardProps {
 
 const skillConfig: Record<SkillLevel, { label: string; colorClass: string }> = {
   elementary: { label: "Elementary", colorClass: "bg-skill-elementary" },
-  highschool_male: { label: "High School Male", colorClass: "bg-skill-highschool" },
-  highschool_female: { label: "High School Female", colorClass: "bg-skill-highschool" },
-  college: { label: "College", colorClass: "bg-skill-college" },
-  adult: { label: "Adult", colorClass: "bg-skill-adult" },
+  highschool_male: { label: "High School Male", colorClass: "bg-skill-highschool-male" },
+  highschool_female: { label: "High School Female", colorClass: "bg-skill-highschool-female" },
+  college_male: { label: "College Male", colorClass: "bg-skill-college-male" },
+  college_female: { label: "College Female", colorClass: "bg-skill-college-female" },
+  adult_male: { label: "Adult Male", colorClass: "bg-skill-adult-male" },
+  adult_female: { label: "Adult Female", colorClass: "bg-skill-adult-female" },
 };
 
 const GameCard = ({ title, location, time, skillLevel, spotsTotal, spotsFilled, gymName, onClick }: GameCardProps) => {

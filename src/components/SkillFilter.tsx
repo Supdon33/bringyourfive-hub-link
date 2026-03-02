@@ -8,15 +8,17 @@ interface SkillFilterProps {
 const filters: { value: SkillLevel | "all"; label: string; dot?: string }[] = [
   { value: "all", label: "All Levels" },
   { value: "elementary", label: "Elementary", dot: "bg-skill-elementary" },
-  { value: "highschool_male", label: "HS Male", dot: "bg-skill-highschool" },
-  { value: "highschool_female", label: "HS Female", dot: "bg-skill-highschool" },
-  { value: "college", label: "College", dot: "bg-skill-college" },
-  { value: "adult", label: "Adult", dot: "bg-skill-adult" },
+  { value: "highschool_male", label: "HS Male", dot: "bg-skill-highschool-male" },
+  { value: "highschool_female", label: "HS Female", dot: "bg-skill-highschool-female" },
+  { value: "college_male", label: "College Male", dot: "bg-skill-college-male" },
+  { value: "college_female", label: "College Female", dot: "bg-skill-college-female" },
+  { value: "adult_male", label: "Adult Male", dot: "bg-skill-adult-male" },
+  { value: "adult_female", label: "Adult Female", dot: "bg-skill-adult-female" },
 ];
 
 const SkillFilter = ({ selected, onChange }: SkillFilterProps) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-col gap-2">
       {filters.map((f) => (
         <button
           key={f.value}
