@@ -56,6 +56,8 @@ export type Database = {
           home_state: string | null
           id: string
           last_name: string
+          sex: string | null
+          skill_level: string | null
           updated_at: string
           user_id: string
           username: string
@@ -71,6 +73,8 @@ export type Database = {
           home_state?: string | null
           id?: string
           last_name: string
+          sex?: string | null
+          skill_level?: string | null
           updated_at?: string
           user_id: string
           username: string
@@ -86,6 +90,8 @@ export type Database = {
           home_state?: string | null
           id?: string
           last_name?: string
+          sex?: string | null
+          skill_level?: string | null
           updated_at?: string
           user_id?: string
           username?: string

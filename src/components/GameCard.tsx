@@ -1,6 +1,6 @@
 import { MapPin, Clock, Users } from "lucide-react";
 
-export type SkillLevel = "elementary" | "highschool" | "college" | "adult";
+export type SkillLevel = "elementary" | "highschool_male" | "highschool_female" | "college" | "adult";
 
 interface GameCardProps {
   title: string;
@@ -15,7 +15,8 @@ interface GameCardProps {
 
 const skillConfig: Record<SkillLevel, { label: string; colorClass: string }> = {
   elementary: { label: "Elementary", colorClass: "bg-skill-elementary" },
-  highschool: { label: "High School", colorClass: "bg-skill-highschool" },
+  highschool_male: { label: "High School Male", colorClass: "bg-skill-highschool" },
+  highschool_female: { label: "High School Female", colorClass: "bg-skill-highschool" },
   college: { label: "College", colorClass: "bg-skill-college" },
   adult: { label: "Adult", colorClass: "bg-skill-adult" },
 };

@@ -36,8 +36,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [cellPhone, setCellPhone] = useState("");
   const [homeState, setHomeState] = useState("");
-  const [birthMonth, setBirthMonth] = useState("");
-  const [birthYear, setBirthYear] = useState("");
+  const [skillLevel, setSkillLevel] = useState("");
+  const [sex, setSex] = useState("");
   const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -87,8 +87,8 @@ const Auth = () => {
           username,
           account_type: accountType,
           cell_phone: cellPhone || null,
-          birth_month: birthMonth ? parseInt(birthMonth) : null,
-          birth_year: birthYear ? parseInt(birthYear) : null,
+          skill_level: skillLevel || null,
+          sex: sex || null,
           home_state: homeState || null,
         },
       },
@@ -209,36 +209,38 @@ const Auth = () => {
               <Input id="cellPhone" type="tel" value={cellPhone} onChange={(e) => setCellPhone(e.target.value)} />
             </div>
             {accountType === "individual" && (
-            <div className="grid grid-cols-2 gap-3">
+            <>
               <div>
-                <Label htmlFor="birthMonth">Birth Month</Label>
+                <Label htmlFor="skillLevel">Skill Level</Label>
                 <select
-                  id="birthMonth"
-                  value={birthMonth}
-                  onChange={(e) => setBirthMonth(e.target.value)}
+                  id="skillLevel"
+                  value={skillLevel}
+                  onChange={(e) => setSkillLevel(e.target.value)}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <option value="">Month…</option>
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <option key={m} value={m}>{new Date(2000, m - 1).toLocaleString('default', { month: 'long' })}</option>
-                  ))}
+                  <option value="">Select skill level…</option>
+                  <option value="elementary">Elementary</option>
+                  <option value="highschool_male">High School Male</option>
+                  <option value="highschool_female">High School Female</option>
+                  <option value="college">College</option>
+                  <option value="adult">Adult</option>
                 </select>
               </div>
               <div>
-                <Label htmlFor="birthYear">Birth Year</Label>
+                <Label htmlFor="sex">Sex *</Label>
                 <select
-                  id="birthYear"
-                  value={birthYear}
-                  onChange={(e) => setBirthYear(e.target.value)}
+                  id="sex"
+                  value={sex}
+                  onChange={(e) => setSex(e.target.value)}
+                  required
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <option value="">Year…</option>
-                  {Array.from({ length: 80 }, (_, i) => new Date().getFullYear() - i).map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
+                  <option value="">Select…</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
-            </div>
+            </>
             )}
             <div>
               <Label htmlFor="homeState">Home State</Label>
