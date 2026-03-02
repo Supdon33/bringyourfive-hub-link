@@ -222,8 +222,10 @@ const Auth = () => {
                   <option value="elementary">Elementary</option>
                   <option value="highschool_male">High School Male</option>
                   <option value="highschool_female">High School Female</option>
-                  <option value="college">College</option>
-                  <option value="adult">Adult</option>
+                  <option value="college_male">College Male</option>
+                  <option value="college_female">College Female</option>
+                  <option value="adult_male">Adult Male</option>
+                  <option value="adult_female">Adult Female</option>
                 </select>
               </div>
               <div>

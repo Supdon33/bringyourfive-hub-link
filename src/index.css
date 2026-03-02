@@ -49,9 +49,12 @@
     --glow-orange: 25 100% 55%;
     --surface-elevated: 220 16% 12%;
     --skill-elementary: 142 70% 45%;
-    --skill-highschool: 200 85% 50%;
-    --skill-college: 280 70% 55%;
-    --skill-adult: 25 95% 53%;
+    --skill-highschool-male: 200 85% 50%;
+    --skill-highschool-female: 330 80% 60%;
+    --skill-college-male: 280 70% 55%;
+    --skill-college-female: 150 70% 45%;
+    --skill-adult-male: 25 95% 53%;
+    --skill-adult-female: 45 90% 55%;
   }
 }
 

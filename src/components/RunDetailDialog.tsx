@@ -25,8 +25,10 @@ const skillLabels: Record<SkillLevel, string> = {
   elementary: "Elementary",
   highschool_male: "High School Male",
   highschool_female: "High School Female",
-  college: "College",
-  adult: "Adult",
+  college_male: "College Male",
+  college_female: "College Female",
+  adult_male: "Adult Male",
+  adult_female: "Adult Female",
 };
 
 const RunDetailDialog = ({ open, onClose, run }: RunDetailDialogProps) => {
