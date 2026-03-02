@@ -38,7 +38,8 @@ const Auth = () => {
   const [homeState, setHomeState] = useState("");
   const [skillLevel, setSkillLevel] = useState("");
   const [sex, setSex] = useState("");
-  const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
+    const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
+    const [signupTier, setSignupTier] = useState<"tier1" | "tier2">("tier1");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +87,7 @@ const Auth = () => {
           last_name: lastName,
           username,
           account_type: accountType,
+          signup_tier: signupTier,
           cell_phone: cellPhone || null,
           skill_level: skillLevel || null,
           sex: sex || null,
@@ -244,8 +246,39 @@ const Auth = () => {
               </div>
             </>
             )}
+            {/* Membership Tier Selection */}
+            <div className="space-y-2">
+              <Label>Membership *</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSignupTier("tier1")}
+                  className={`flex flex-col items-center gap-1 rounded-lg border-2 p-4 transition-colors ${
+                    signupTier === "tier1"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="font-display text-sm tracking-wider">Basic</span>
+                  <span className="text-xs text-muted-foreground">Runs in your state</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSignupTier("tier2")}
+                  className={`flex flex-col items-center gap-1 rounded-lg border-2 p-4 transition-colors ${
+                    signupTier === "tier2"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  <span className="font-display text-sm tracking-wider">Premium</span>
+                  <span className="text-xs text-muted-foreground">Runs in all states</span>
+                </button>
+              </div>
+            </div>
+
             <div>
-              <Label htmlFor="homeState">Home State</Label>
+              <Label htmlFor="homeState">Home State *</Label>
               <select
                 id="homeState"
                 value={homeState}

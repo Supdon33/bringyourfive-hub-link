@@ -27,6 +27,7 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
   const [time, setTime] = useState("");
   const [skillLevel, setSkillLevel] = useState<SkillLevel>("adult_male");
   const [spotsTotal, setSpotsTotal] = useState(10);
+  const [state, setState] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,13 +42,14 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
       skill_level: skillLevel,
       spots_total: spotsTotal,
       spots_filled: 0,
+      state: state || null,
     });
     setLoading(false);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Run listed!" });
-      setTitle(""); setLocation(""); setGymName(""); setTime(""); setSpotsTotal(10);
+      setTitle(""); setLocation(""); setGymName(""); setTime(""); setSpotsTotal(10); setState("");
       queryClient.invalidateQueries({ queryKey: RUNS_QUERY_KEY });
       onAdded();
       onClose();
@@ -84,6 +86,19 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
               <Label>Total Spots</Label>
               <Input type="number" value={spotsTotal} onChange={(e) => setSpotsTotal(Number(e.target.value))} min={2} required />
             </div>
+          </div>
+          <div>
+            <Label>State</Label>
+            <select
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <option value="">Select state…</option>
+              {["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"].map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
           </div>
           <div>
             <Label>Skill Level</Label>
