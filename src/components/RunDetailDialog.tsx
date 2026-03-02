@@ -23,7 +23,8 @@ interface RunDetailDialogProps {
 
 const skillLabels: Record<SkillLevel, string> = {
   elementary: "Elementary",
-  highschool: "High School",
+  highschool_male: "High School Male",
+  highschool_female: "High School Female",
   college: "College",
   adult: "Adult",
 };

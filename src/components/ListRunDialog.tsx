@@ -93,7 +93,8 @@ const ListRunDialog = ({ open, onClose, onAdded }: ListRunDialogProps) => {
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="elementary">Elementary</option>
-              <option value="highschool">High School</option>
+              <option value="highschool_male">High School Male</option>
+              <option value="highschool_female">High School Female</option>
               <option value="college">College</option>
               <option value="adult">Adult</option>
             </select>

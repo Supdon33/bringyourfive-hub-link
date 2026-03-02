@@ -8,7 +8,8 @@ interface SkillFilterProps {
 const filters: { value: SkillLevel | "all"; label: string; dot?: string }[] = [
   { value: "all", label: "All Levels" },
   { value: "elementary", label: "Elementary", dot: "bg-skill-elementary" },
-  { value: "highschool", label: "High School", dot: "bg-skill-highschool" },
+  { value: "highschool_male", label: "HS Male", dot: "bg-skill-highschool" },
+  { value: "highschool_female", label: "HS Female", dot: "bg-skill-highschool" },
   { value: "college", label: "College", dot: "bg-skill-college" },
   { value: "adult", label: "Adult", dot: "bg-skill-adult" },
 ];
