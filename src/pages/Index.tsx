@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { Plus, Menu, LogOut } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
 import GameCard, { type SkillLevel } from "@/components/GameCard";
@@ -24,6 +30,7 @@ const Index = () => {
   const [gymList, setGymList] = useState(gyms);
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
@@ -41,6 +48,25 @@ const Index = () => {
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#runs" className="hover:text-foreground transition-colors">Runs</a>
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="hover:text-foreground transition-colors p-1">
+                  <MoreVertical className="w-5 h-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setShowContact(true)}>
+                  <Mail className="w-4 h-4 mr-2" />
+                  Contact Us
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/privacy">
+                    <Shield className="w-4 h-4 mr-2" />
+                    Privacy Notice
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="hidden sm:flex items-center gap-3">
             {user ? (
@@ -83,6 +109,14 @@ const Index = () => {
               <nav className="flex flex-col gap-6 mt-8">
                 <a href="#runs" className="text-lg font-display text-foreground hover:text-primary transition-colors">Runs</a>
                 <a href="#gyms" className="text-lg font-display text-foreground hover:text-primary transition-colors">Gyms</a>
+                <button onClick={() => setShowContact(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  Contact Us
+                </button>
+                <Link to="/privacy" className="text-lg font-display text-foreground hover:text-primary transition-colors flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  Privacy Notice
+                </Link>
                 {user ? (
                   <button
                     onClick={signOut}
@@ -251,13 +285,14 @@ const Index = () => {
         run={selectedRun}
       />
 
-      <ContactUsDialog />
+      <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
           <BrandLogo size="small" />
           <p className="mt-2">Connecting ballers with courts since 2025.</p>
+          <p className="mt-1 text-xs">Bring Your 5™ is a trademark of JGS3 LLC. All rights reserved.</p>
         </div>
       </footer>
     </div>
