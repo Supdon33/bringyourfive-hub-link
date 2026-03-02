@@ -13,19 +13,24 @@ export interface Run {
   spots_total: number;
   spots_filled: number;
   gym_name: string;
+  state: string | null;
 }
 
-export const useRuns = (skillFilter: SkillLevel | "all" = "all") => {
+export const useRuns = (skillFilter: SkillLevel | "all" = "all", stateFilter: string = "all") => {
   return useQuery({
-    queryKey: [...RUNS_QUERY_KEY, skillFilter],
+    queryKey: [...RUNS_QUERY_KEY, skillFilter, stateFilter],
     queryFn: async () => {
       let query = supabase
         .from("runs")
-        .select("id, title, location, time, skill_level, spots_total, spots_filled, gym_name")
+        .select("id, title, location, time, skill_level, spots_total, spots_filled, gym_name, state")
         .order("created_at", { ascending: false });
 
       if (skillFilter !== "all") {
         query = query.eq("skill_level", skillFilter);
+      }
+
+      if (stateFilter !== "all") {
+        query = query.eq("state", stateFilter);
       }
 
       const { data, error } = await query;

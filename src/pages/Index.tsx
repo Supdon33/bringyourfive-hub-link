@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Menu, LogOut, MoreVertical, Mail, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -11,6 +11,7 @@ import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
+import StateFilter from "@/components/StateFilter";
 import GymCard from "@/components/GymCard";
 import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
@@ -19,6 +20,8 @@ import ContactUsDialog from "@/components/ContactUsDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
+import { useRunNotifications } from "@/hooks/useRunNotifications";
+import { supabase } from "@/integrations/supabase/client";
 import { Lock, Loader2 } from "lucide-react";
 
 const gyms = [
@@ -27,6 +30,7 @@ const gyms = [
 
 const Index = () => {
   const [selectedSkill, setSelectedSkill] = useState<SkillLevel | "all">("all");
+  const [selectedState, setSelectedState] = useState<string>("all");
   const [gymList, setGymList] = useState(gyms);
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
@@ -35,9 +39,27 @@ const Index = () => {
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
   } | null>(null);
-  const { user, username, hasActiveSub, loading, signOut } = useAuth();
+  const { user, username, hasActiveSub, hasTier, loading, signOut } = useAuth();
 
-  const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill);
+  // Auto-set state filter for basic users
+  useEffect(() => {
+    if (user && !hasTier("tier2")) {
+      supabase
+        .from("profiles")
+        .select("home_state")
+        .eq("user_id", user.id)
+        .single()
+        .then(({ data }) => {
+          if (data?.home_state) {
+            setSelectedState(data.home_state);
+          }
+        });
+    }
+  }, [user, hasTier]);
+
+  const { data: runs = [], isLoading: runsLoading } = useRuns(selectedSkill, selectedState);
+  
+  useRunNotifications();
 
   return (
     <div className="min-h-screen bg-background">
@@ -160,6 +182,19 @@ const Index = () => {
             <SkillFilter selected={selectedSkill} onChange={setSelectedSkill} />
           </div>
         </div>
+
+        {/* State Filter */}
+        {user && (
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-sm text-muted-foreground">Filter by state:</span>
+            <StateFilter selected={selectedState} onChange={setSelectedState} />
+            {!hasTier("tier2") && (
+              <span className="text-xs text-muted-foreground italic">
+                Basic members see runs in their home state. Upgrade to Premium for all states.
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Gated content */}
         {!loading && !user ? (
