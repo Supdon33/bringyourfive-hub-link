@@ -1,0 +1,2 @@
+ALTER TABLE public.runs DROP CONSTRAINT runs_skill_level_check;
+ALTER TABLE public.runs ADD CONSTRAINT runs_skill_level_check CHECK (skill_level = ANY (ARRAY['elementary', 'highschool_male', 'highschool_female', 'college_male', 'college_female', 'adult_male', 'adult_female']));
