@@ -164,16 +164,16 @@ const Index = () => {
 
       {/* Games Section */}
       <section id="runs" className="container mx-auto px-4 py-20">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
           <div>
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Available Runs</h2>
             <p className="text-muted-foreground mt-1">Find a run that matches your level</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:flex-wrap">
             {user && (
               <button
                 onClick={() => setShowListRun(true)}
-                className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+                className="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 List a Run
@@ -185,7 +185,7 @@ const Index = () => {
 
         {/* State Filter */}
         {user && (
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-6">
             <span className="text-sm text-muted-foreground">Filter by state:</span>
             <StateFilter selected={selectedState} onChange={setSelectedState} />
             {!hasTier("tier2") && (
