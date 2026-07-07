@@ -79,6 +79,12 @@ const Index = () => {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {user && (
+                  <DropdownMenuItem onClick={() => setShowAccount(true)}>
+                    <UserIcon className="w-4 h-4 mr-2" />
+                    Account
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => setShowContact(true)}>
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Us
