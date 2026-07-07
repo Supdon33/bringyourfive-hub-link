@@ -147,6 +147,12 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                   Privacy Notice
                 </Link>
+                {user && (
+                  <button onClick={() => setShowAccount(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
+                    <UserIcon className="w-4 h-4" />
+                    Account
+                  </button>
+                )}
                 {user ? (
                   <button
                     onClick={signOut}
