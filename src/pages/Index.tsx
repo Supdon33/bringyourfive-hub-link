@@ -336,6 +336,8 @@ const Index = () => {
 
       <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
 
+      <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
+
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
