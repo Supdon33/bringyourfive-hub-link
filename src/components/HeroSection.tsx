@@ -3,7 +3,7 @@ import logoImage from "@/assets/bring-your-five-logo.jpeg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-24 pb-16">
       <img
         src={heroImage}
         alt="Basketball court at night"
