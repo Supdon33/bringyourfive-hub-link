@@ -17,6 +17,7 @@ import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
 import RunDetailDialog from "@/components/RunDetailDialog";
 import ContactUsDialog from "@/components/ContactUsDialog";
+import AccountDialog from "@/components/AccountDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
