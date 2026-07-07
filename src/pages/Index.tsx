@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import AddGymDialog from "@/components/AddGymDialog";
 import ListRunDialog from "@/components/ListRunDialog";
 import RunDetailDialog from "@/components/RunDetailDialog";
 import ContactUsDialog from "@/components/ContactUsDialog";
+import AccountDialog from "@/components/AccountDialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
@@ -35,6 +36,7 @@ const Index = () => {
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
@@ -77,6 +79,12 @@ const Index = () => {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {user && (
+                  <DropdownMenuItem onClick={() => setShowAccount(true)}>
+                    <UserIcon className="w-4 h-4 mr-2" />
+                    Account
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => setShowContact(true)}>
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Us
@@ -139,6 +147,12 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                   Privacy Notice
                 </Link>
+                {user && (
+                  <button onClick={() => setShowAccount(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
+                    <UserIcon className="w-4 h-4" />
+                    Account
+                  </button>
+                )}
                 {user ? (
                   <button
                     onClick={signOut}
@@ -321,6 +335,8 @@ const Index = () => {
       />
 
       <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
+
+      <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
