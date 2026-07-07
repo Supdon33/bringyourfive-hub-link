@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
