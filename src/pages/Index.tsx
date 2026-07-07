@@ -36,6 +36,7 @@ const Index = () => {
   const [showAddGym, setShowAddGym] = useState(false);
   const [showListRun, setShowListRun] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
