@@ -348,6 +348,7 @@ const Index = () => {
       <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
 
       <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
+      <IAPUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
