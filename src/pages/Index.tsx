@@ -18,6 +18,8 @@ import ListRunDialog from "@/components/ListRunDialog";
 import RunDetailDialog from "@/components/RunDetailDialog";
 import ContactUsDialog from "@/components/ContactUsDialog";
 import AccountDialog from "@/components/AccountDialog";
+import IAPUpgradeDialog from "@/components/IAPUpgradeDialog";
+import { isNativeIOS } from "@/lib/purchases";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
@@ -37,6 +39,7 @@ const Index = () => {
   const [showListRun, setShowListRun] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
@@ -206,6 +209,14 @@ const Index = () => {
               <span className="text-xs text-muted-foreground italic">
                 Basic members see runs in their home state. Upgrade to Premium for all states.
               </span>
+            )}
+            {!hasTier("tier2") && isNativeIOS() && (
+              <button
+                onClick={() => setShowUpgrade(true)}
+                className="ml-2 text-xs font-semibold text-primary underline underline-offset-2"
+              >
+                Upgrade
+              </button>
             )}
           </div>
         )}
