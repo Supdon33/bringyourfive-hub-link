@@ -1,68 +1,85 @@
 import { Capacitor } from "@capacitor/core";
-import { Purchases, LOG_LEVEL, PURCHASES_ERROR_CODE } from "@revenuecat/purchases-capacitor";
-import type { PurchasesPackage } from "@revenuecat/purchases-capacitor";
+import "cordova-plugin-purchase";
 import { supabase } from "@/integrations/supabase/client";
 
-// Replace with your real RevenueCat public SDK keys before submitting to the App Store.
-// Get them from https://app.revenuecat.com → Project Settings → API keys.
-const REVENUECAT_APPLE_API_KEY = "appl_YOUR_KEY_HERE";
-
-// Entitlement identifiers configured in RevenueCat (Entitlements tab).
-// These must match the identifiers on your entitlements exactly.
-export const ENTITLEMENT_TIER1 = "tier1";
-export const ENTITLEMENT_TIER2 = "tier2";
-
-let configured = false;
+// Product identifiers must match what you create in App Store Connect exactly.
+export const PRODUCT_TIER1 = "com.bringyour5.tier1.monthly";
+export const PRODUCT_TIER2 = "com.bringyour5.tier2.monthly";
 
 export const isNativeIOS = () =>
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
 
+// cordova-plugin-purchase exposes `CdvPurchase` on window.
+const store = () => (globalThis as any).CdvPurchase?.store as any;
+const CDV = () => (globalThis as any).CdvPurchase as any;
+
+let initialized = false;
+let readyPromise: Promise<void> | null = null;
+
 export async function configurePurchases(appUserId?: string) {
-  if (!isNativeIOS() || configured) return;
-  await Purchases.setLogLevel({ level: LOG_LEVEL.WARN });
-  await Purchases.configure({
-    apiKey: REVENUECAT_APPLE_API_KEY,
-    appUserID: appUserId,
+  if (!isNativeIOS() || initialized) return readyPromise ?? Promise.resolve();
+  const cdv = CDV();
+  const s = store();
+  if (!cdv || !s) return;
+
+  s.verbosity = cdv.LogLevel.WARNING;
+  if (appUserId) s.applicationUsername = () => appUserId;
+
+  s.register([
+    { id: PRODUCT_TIER1, type: cdv.ProductType.PAID_SUBSCRIPTION, platform: cdv.Platform.APPLE_APPSTORE },
+    { id: PRODUCT_TIER2, type: cdv.ProductType.PAID_SUBSCRIPTION, platform: cdv.Platform.APPLE_APPSTORE },
+  ]);
+
+  s.when()
+    .approved((transaction: any) => transaction.verify())
+    .verified((receipt: any) => {
+      receipt.finish();
+      syncEntitlementsToBackend();
+    });
+
+  readyPromise = new Promise<void>((resolve) => {
+    s.ready(() => resolve());
+    s.initialize([cdv.Platform.APPLE_APPSTORE]).catch(() => resolve());
   });
-  configured = true;
+  initialized = true;
+  await readyPromise;
 }
 
-export async function getOfferings() {
-  const { current } = await Purchases.getOfferings();
-  return current;
+export function getProducts(): any[] {
+  const s = store();
+  if (!s) return [];
+  return [PRODUCT_TIER1, PRODUCT_TIER2]
+    .map((id) => s.get(id, CDV().Platform.APPLE_APPSTORE))
+    .filter(Boolean);
 }
 
-export async function purchasePackage(pkg: PurchasesPackage) {
-  try {
-    const { customerInfo } = await Purchases.purchasePackage({ aPackage: pkg });
-    await syncEntitlementsToBackend(customerInfo.entitlements.active);
-    return customerInfo;
-  } catch (e: any) {
-    if (e?.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) return null;
-    throw e;
+export async function purchaseProduct(product: any): Promise<boolean> {
+  const offer = product.getOffer?.() ?? product.offers?.[0];
+  if (!offer) throw new Error("No offer available for this product.");
+  const result = await store().order(offer);
+  if (result && result.isError) {
+    if (result.code === CDV().ErrorCode.PAYMENT_CANCELLED) return false;
+    throw new Error(result.message ?? "Purchase failed");
   }
+  return true;
 }
 
 export async function restorePurchases() {
-  const { customerInfo } = await Purchases.restorePurchases();
-  await syncEntitlementsToBackend(customerInfo.entitlements.active);
-  return customerInfo;
+  await store().restorePurchases();
+  await syncEntitlementsToBackend();
 }
 
-async function syncEntitlementsToBackend(active: Record<string, unknown>) {
+async function syncEntitlementsToBackend() {
   const { data: userRes } = await supabase.auth.getUser();
   const user = userRes.user;
   if (!user) return;
-
-  const tiers: Array<"tier1" | "tier2"> = [];
-  if (active[ENTITLEMENT_TIER1]) tiers.push("tier1");
-  if (active[ENTITLEMENT_TIER2]) tiers.push("tier2");
-
-  // Upsert active subscriptions so the rest of the app (hasTier) works unchanged.
-  for (const tier of tiers) {
-    await supabase.from("subscriptions").upsert(
-      { user_id: user.id, tier, status: "active" },
-      { onConflict: "user_id,tier" }
-    );
+  const s = store();
+  const active: Array<"tier1" | "tier2"> = [];
+  if (s.owned(PRODUCT_TIER1)) active.push("tier1");
+  if (s.owned(PRODUCT_TIER2)) active.push("tier2");
+  for (const tier of active) {
+    await supabase
+      .from("subscriptions")
+      .upsert({ user_id: user.id, tier, status: "active" }, { onConflict: "user_id,tier" });
   }
 }

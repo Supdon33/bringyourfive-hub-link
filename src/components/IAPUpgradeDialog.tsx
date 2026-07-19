@@ -6,12 +6,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import {
   configurePurchases,
-  getOfferings,
+  getProducts,
   isNativeIOS,
-  purchasePackage,
+  purchaseProduct,
   restorePurchases,
 } from "@/lib/purchases";
-import type { PurchasesPackage } from "@revenuecat/purchases-capacitor";
 
 interface Props {
   open: boolean;
@@ -23,7 +22,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [packages, setPackages] = useState<PurchasesPackage[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (!open || !isNativeIOS()) return;
@@ -31,8 +30,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
       try {
         setLoading(true);
         await configurePurchases(user?.id);
-        const current = await getOfferings();
-        setPackages(current?.availablePackages ?? []);
+        setProducts(getProducts());
       } catch (e: any) {
         toast({ title: "Unable to load subscriptions", description: e?.message ?? String(e), variant: "destructive" });
       } finally {
@@ -41,11 +39,11 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
     })();
   }, [open, user?.id, toast]);
 
-  const handleBuy = async (pkg: PurchasesPackage) => {
+  const handleBuy = async (product: any) => {
     setBusy(true);
     try {
-      const info = await purchasePackage(pkg);
-      if (info) {
+      const ok = await purchaseProduct(product);
+      if (ok) {
         toast({ title: "Subscription active", description: "Thanks for supporting Bring Your 5!" });
         onOpenChange(false);
       }
@@ -81,26 +79,30 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
 
         {loading ? (
           <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin" /></div>
-        ) : packages.length === 0 ? (
+        ) : products.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4">No subscriptions available right now.</p>
         ) : (
           <div className="space-y-3">
-            {packages.map((pkg) => (
-              <button
-                key={pkg.identifier}
-                onClick={() => handleBuy(pkg)}
-                disabled={busy}
-                className="w-full text-left border border-border rounded-lg p-4 hover:border-primary transition-colors disabled:opacity-50"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-display text-lg">{pkg.product.title}</div>
-                    <div className="text-sm text-muted-foreground">{pkg.product.description}</div>
+            {products.map((p) => {
+              const offer = p.getOffer?.() ?? p.offers?.[0];
+              const price = offer?.pricingPhases?.[0]?.price ?? "";
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => handleBuy(p)}
+                  disabled={busy}
+                  className="w-full text-left border border-border rounded-lg p-4 hover:border-primary transition-colors disabled:opacity-50"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-display text-lg">{p.title}</div>
+                      <div className="text-sm text-muted-foreground">{p.description}</div>
+                    </div>
+                    <div className="font-semibold">{price}</div>
                   </div>
-                  <div className="font-semibold">{pkg.product.priceString}</div>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         )}
 
