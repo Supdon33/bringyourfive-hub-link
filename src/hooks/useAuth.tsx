@@ -3,8 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 import type { User, Session } from "@supabase/supabase-js";
 
+export type SubscriptionTier = "tier1" | "tier2" | "gym_listing" | "gym_featured";
+
 interface Subscription {
-  tier: "tier1" | "tier2" | "gym_listing";
+  tier: SubscriptionTier;
   status: string;
 }
 
@@ -15,7 +17,7 @@ interface AuthContextType {
   username: string | null;
   subscriptions: Subscription[];
   hasActiveSub: boolean;
-  hasTier: (tier: "tier1" | "tier2" | "gym_listing") => boolean;
+  hasTier: (tier: SubscriptionTier) => boolean;
   signOut: () => Promise<void>;
 }
 
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const hasActiveSub = subscriptions.length > 0;
 
-  const hasTier = (tier: "tier1" | "tier2" | "gym_listing") =>
+  const hasTier = (tier: SubscriptionTier) =>
     subscriptions.some((s) => s.tier === tier && s.status === "active");
 
   const signOut = useCallback(async () => {

@@ -5,6 +5,24 @@ import { supabase } from "@/integrations/supabase/client";
 // Product identifiers must match what you create in App Store Connect exactly.
 export const PRODUCT_TIER1 = "com.bringyour5.tier1.monthly";
 export const PRODUCT_TIER2 = "com.bringyour5.tier2.monthly";
+export const PRODUCT_GYM_STANDARD = "com.bringyour5.gym.standard.monthly";
+export const PRODUCT_GYM_FEATURED = "com.bringyour5.gym.featured.monthly";
+
+export type SubTier = "tier1" | "tier2" | "gym_listing" | "gym_featured";
+
+export const PRODUCT_TO_TIER: Record<string, SubTier> = {
+  [PRODUCT_TIER1]: "tier1",
+  [PRODUCT_TIER2]: "tier2",
+  [PRODUCT_GYM_STANDARD]: "gym_listing",
+  [PRODUCT_GYM_FEATURED]: "gym_featured",
+};
+
+export const ALL_PRODUCT_IDS = [
+  PRODUCT_TIER1,
+  PRODUCT_TIER2,
+  PRODUCT_GYM_STANDARD,
+  PRODUCT_GYM_FEATURED,
+];
 
 export const isNativeIOS = () =>
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
@@ -25,10 +43,13 @@ export async function configurePurchases(appUserId?: string) {
   s.verbosity = cdv.LogLevel.WARNING;
   if (appUserId) s.applicationUsername = () => appUserId;
 
-  s.register([
-    { id: PRODUCT_TIER1, type: cdv.ProductType.PAID_SUBSCRIPTION, platform: cdv.Platform.APPLE_APPSTORE },
-    { id: PRODUCT_TIER2, type: cdv.ProductType.PAID_SUBSCRIPTION, platform: cdv.Platform.APPLE_APPSTORE },
-  ]);
+  s.register(
+    ALL_PRODUCT_IDS.map((id) => ({
+      id,
+      type: cdv.ProductType.PAID_SUBSCRIPTION,
+      platform: cdv.Platform.APPLE_APPSTORE,
+    }))
+  );
 
   s.when()
     .approved((transaction: any) => transaction.verify())
@@ -45,10 +66,10 @@ export async function configurePurchases(appUserId?: string) {
   await readyPromise;
 }
 
-export function getProducts(): any[] {
+export function getProducts(filterIds?: string[]): any[] {
   const s = store();
   if (!s) return [];
-  return [PRODUCT_TIER1, PRODUCT_TIER2]
+  return (filterIds ?? ALL_PRODUCT_IDS)
     .map((id) => s.get(id, CDV().Platform.APPLE_APPSTORE))
     .filter(Boolean);
 }
@@ -74,9 +95,7 @@ async function syncEntitlementsToBackend() {
   const user = userRes.user;
   if (!user) return;
   const s = store();
-  const active: Array<"tier1" | "tier2"> = [];
-  if (s.owned(PRODUCT_TIER1)) active.push("tier1");
-  if (s.owned(PRODUCT_TIER2)) active.push("tier2");
+  const active = ALL_PRODUCT_IDS.filter((id) => s.owned(id)).map((id) => PRODUCT_TO_TIER[id]);
   for (const tier of active) {
     await supabase
       .from("subscriptions")

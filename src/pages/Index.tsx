@@ -40,6 +40,7 @@ const Index = () => {
   const [showContact, setShowContact] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showGymUpgrade, setShowGymUpgrade] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
@@ -311,7 +312,11 @@ const Index = () => {
           </div>
           {user && (
             <button
-              onClick={() => setShowAddGym(true)}
+              onClick={() => {
+                const needsGymSub = isNativeIOS() && !hasTier("gym_listing") && !hasTier("gym_featured");
+                if (needsGymSub) setShowGymUpgrade(true);
+                else setShowAddGym(true);
+              }}
               className="flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
             >
               <Plus className="w-4 h-4" />
@@ -349,6 +354,7 @@ const Index = () => {
 
       <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
       <IAPUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} />
+      <IAPUpgradeDialog open={showGymUpgrade} onOpenChange={setShowGymUpgrade} group="gym" />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">

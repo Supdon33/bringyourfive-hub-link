@@ -10,14 +10,25 @@ import {
   isNativeIOS,
   purchaseProduct,
   restorePurchases,
+  PRODUCT_TIER1,
+  PRODUCT_TIER2,
+  PRODUCT_GYM_STANDARD,
+  PRODUCT_GYM_FEATURED,
 } from "@/lib/purchases";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Which subscription group to show. Defaults to player memberships. */
+  group?: "player" | "gym";
 }
 
-const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
+const GROUP_IDS = {
+  player: [PRODUCT_TIER1, PRODUCT_TIER2],
+  gym: [PRODUCT_GYM_STANDARD, PRODUCT_GYM_FEATURED],
+} as const;
+
+const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
@@ -30,14 +41,14 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
       try {
         setLoading(true);
         await configurePurchases(user?.id);
-        setProducts(getProducts());
+        setProducts(getProducts([...GROUP_IDS[group]]));
       } catch (e: any) {
         toast({ title: "Unable to load subscriptions", description: e?.message ?? String(e), variant: "destructive" });
       } finally {
         setLoading(false);
       }
     })();
-  }, [open, user?.id, toast]);
+  }, [open, user?.id, group, toast]);
 
   const handleBuy = async (product: any) => {
     setBusy(true);
@@ -73,7 +84,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange }: Props) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Upgrade your membership</DialogTitle>
+          <DialogTitle>{group === "gym" ? "Gym membership" : "Upgrade your membership"}</DialogTitle>
           <DialogDescription>Purchases are handled securely through the App Store.</DialogDescription>
         </DialogHeader>
 
