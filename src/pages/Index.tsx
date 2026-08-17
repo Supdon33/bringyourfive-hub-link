@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -19,6 +19,7 @@ import RunDetailDialog from "@/components/RunDetailDialog";
 import ContactUsDialog from "@/components/ContactUsDialog";
 import AccountDialog from "@/components/AccountDialog";
 import IAPUpgradeDialog from "@/components/IAPUpgradeDialog";
+import AboutDialog from "@/components/AboutDialog";
 import { isNativeIOS } from "@/lib/purchases";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
@@ -39,6 +40,7 @@ const Index = () => {
   const [showListRun, setShowListRun] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showGymUpgrade, setShowGymUpgrade] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
@@ -74,6 +76,7 @@ const Index = () => {
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <BrandLogo />
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
+            <button onClick={() => setShowAbout(true)} className="hover:text-foreground transition-colors">About</button>
             <a href="#runs" className="hover:text-foreground transition-colors">Runs</a>
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
             <DropdownMenu>
@@ -141,6 +144,10 @@ const Index = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-64 bg-background border-border">
               <nav className="flex flex-col gap-6 mt-8">
+                <button onClick={() => setShowAbout(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
+                  <Info className="w-4 h-4" />
+                  About
+                </button>
                 <a href="#runs" className="text-lg font-display text-foreground hover:text-primary transition-colors">Runs</a>
                 <a href="#gyms" className="text-lg font-display text-foreground hover:text-primary transition-colors">Gyms</a>
                 <button onClick={() => setShowContact(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
@@ -351,6 +358,8 @@ const Index = () => {
       />
 
       <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
+
+      <AboutDialog open={showAbout} onOpenChange={setShowAbout} />
 
       <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
       <IAPUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} />
