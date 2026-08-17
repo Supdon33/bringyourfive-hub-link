@@ -40,6 +40,7 @@ const Index = () => {
   const [showListRun, setShowListRun] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showGymUpgrade, setShowGymUpgrade] = useState(false);
   const [selectedRun, setSelectedRun] = useState<{
