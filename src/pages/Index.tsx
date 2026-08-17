@@ -144,6 +144,10 @@ const Index = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-64 bg-background border-border">
               <nav className="flex flex-col gap-6 mt-8">
+                <button onClick={() => setShowAbout(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
+                  <Info className="w-4 h-4" />
+                  About
+                </button>
                 <a href="#runs" className="text-lg font-display text-foreground hover:text-primary transition-colors">Runs</a>
                 <a href="#gyms" className="text-lg font-display text-foreground hover:text-primary transition-colors">Gyms</a>
                 <button onClick={() => setShowContact(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
