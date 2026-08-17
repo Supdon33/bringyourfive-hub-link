@@ -76,6 +76,7 @@ const Index = () => {
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <BrandLogo />
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
+            <button onClick={() => setShowAbout(true)} className="hover:text-foreground transition-colors">About</button>
             <a href="#runs" className="hover:text-foreground transition-colors">Runs</a>
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
             <DropdownMenu>
