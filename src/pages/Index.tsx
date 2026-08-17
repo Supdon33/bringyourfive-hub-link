@@ -359,6 +359,8 @@ const Index = () => {
 
       <ContactUsDialog open={showContact} onOpenChange={setShowContact} />
 
+      <AboutDialog open={showAbout} onOpenChange={setShowAbout} />
+
       <AccountDialog open={showAccount} onOpenChange={setShowAccount} />
       <IAPUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} />
       <IAPUpgradeDialog open={showGymUpgrade} onOpenChange={setShowGymUpgrade} group="gym" />
