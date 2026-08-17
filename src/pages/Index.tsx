@@ -19,6 +19,7 @@ import RunDetailDialog from "@/components/RunDetailDialog";
 import ContactUsDialog from "@/components/ContactUsDialog";
 import AccountDialog from "@/components/AccountDialog";
 import IAPUpgradeDialog from "@/components/IAPUpgradeDialog";
+import AboutDialog from "@/components/AboutDialog";
 import { isNativeIOS } from "@/lib/purchases";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
