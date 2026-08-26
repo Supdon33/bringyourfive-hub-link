@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -92,6 +92,12 @@ const Index = () => {
                     Account
                   </DropdownMenuItem>
                 )}
+                {user && (
+                  <DropdownMenuItem onClick={() => setShowAccount(true)} className="text-destructive focus:text-destructive">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Account
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => setShowContact(true)}>
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Us
@@ -162,6 +168,12 @@ const Index = () => {
                   <button onClick={() => setShowAccount(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
                     <UserIcon className="w-4 h-4" />
                     Account
+                  </button>
+                )}
+                {user && (
+                  <button onClick={() => setShowAccount(true)} className="text-lg font-display text-destructive hover:brightness-125 transition-colors text-left flex items-center gap-2">
+                    <Trash2 className="w-4 h-4" />
+                    Delete Account
                   </button>
                 )}
                 {user ? (
