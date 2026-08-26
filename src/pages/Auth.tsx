@@ -45,21 +45,20 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Look up email by username
-    const { data: profile, error: lookupError } = await supabase
-      .from("profiles")
-      .select("email")
-      .eq("username", signInUsername)
-      .maybeSingle();
+    // Look up email by username via a secure backend function
+    const { data: lookup, error: lookupError } = await supabase.functions.invoke("lookup-username", {
+      body: { username: signInUsername },
+    });
 
-    if (lookupError || !profile) {
+    if (lookupError || !lookup?.email) {
       setLoading(false);
       toast({ title: "Sign in failed", description: "Username not found.", variant: "destructive" });
       return;
     }
 
     const { error } = await supabase.auth.signInWithPassword({
-      email: profile.email,
+      email: lookup.email,
+
       password: signInPassword,
     });
     setLoading(false);
