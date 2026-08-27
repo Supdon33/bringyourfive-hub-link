@@ -3,10 +3,10 @@ import "cordova-plugin-purchase";
 import { supabase } from "@/integrations/supabase/client";
 
 // Product identifiers must match what you create in App Store Connect exactly.
-export const PRODUCT_TIER1 = "com.bringyour5.tier01.monthly";
-export const PRODUCT_TIER2 = "com.bringyour5.tier02.monthly";
-export const PRODUCT_GYM_STANDARD = "com.bringyour5.gym.standard.monthly";
-export const PRODUCT_GYM_FEATURED = "com.bringyour5.gym.featured.monthly";
+export const PRODUCT_TIER1 = "com.bringyour5.tier001.monthly";
+export const PRODUCT_TIER2 = "com.bringyour5.tier002.monthly";
+export const PRODUCT_GYM_STANDARD = "com.bringyour5.gym.standard.monthly.01";
+export const PRODUCT_GYM_FEATURED = "com.bringyour5.gym.featured.monthly.2";
 
 export type SubTier = "tier1" | "tier2" | "gym_listing" | "gym_featured";
 
