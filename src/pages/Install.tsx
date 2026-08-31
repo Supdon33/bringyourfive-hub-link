@@ -43,7 +43,13 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <Seo
+        title="Install the Bring Your 5 App"
+        description="Add Bring Your 5 to your home screen on iPhone, iPad, or Android for quick access to local pickup basketball runs."
+        path="/install"
+      />
       <div className="max-w-md w-full text-center space-y-8">
+
         <div className="space-y-2">
           <Smartphone className="w-16 h-16 mx-auto text-primary" />
           <h1 className="text-3xl font-bold text-foreground">Install Bring Your 5</h1>
