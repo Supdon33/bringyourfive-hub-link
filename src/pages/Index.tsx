@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
+import Seo from "@/components/Seo";
+
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
 import StateFilter from "@/components/StateFilter";
@@ -71,6 +73,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Bring Your Five – Find Pickup Basketball Games"
+        description="Connect with local gyms, find pickup basketball runs at your skill level, and never miss a game again."
+        path="/"
+      />
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
@@ -81,10 +88,11 @@ const Index = () => {
             <a href="#gyms" className="hover:text-foreground transition-colors">Gyms</a>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="hover:text-foreground transition-colors p-1">
+                <button aria-label="More options" className="hover:text-foreground transition-colors p-1">
                   <MoreVertical className="w-5 h-5" />
                 </button>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent align="end">
                 {user && (
                   <DropdownMenuItem onClick={() => setShowAccount(true)}>
@@ -144,7 +152,7 @@ const Index = () => {
           </div>
           <Sheet>
             <SheetTrigger asChild>
-              <button className="sm:hidden p-2 text-foreground">
+              <button aria-label="Open menu" className="sm:hidden p-2 text-foreground">
                 <Menu className="w-5 h-5" />
               </button>
             </SheetTrigger>

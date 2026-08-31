@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import BrandLogo from "@/components/BrandLogo";
+import Seo from "@/components/Seo";
+
 import ForgotPasswordDialog from "@/components/ForgotPasswordDialog";
 import { useToast } from "@/hooks/use-toast";
 
@@ -108,10 +110,19 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <Seo
+        title="Sign In or Join – Bring Your Five"
+        description="Sign in or create your Bring Your 5 account to find pickup basketball runs at your skill level near you."
+        path="/auth"
+      />
       <div className="w-full max-w-md">
-        <div className="flex justify-center mb-8">
+        <div className="flex flex-col items-center gap-4 mb-8">
           <BrandLogo />
+          <h1 className="font-display text-2xl text-foreground tracking-wide">
+            {mode === "signin" ? "Sign In to Bring Your 5" : "Join Bring Your 5"}
+          </h1>
         </div>
+
 
         {/* Tabs */}
         <div className="flex mb-6 border-b border-border">
