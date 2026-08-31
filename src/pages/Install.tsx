@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, CheckCircle, Smartphone, Share } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Seo from "@/components/Seo";
+
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;

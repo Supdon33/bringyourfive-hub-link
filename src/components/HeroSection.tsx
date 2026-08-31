@@ -19,15 +19,20 @@ const HeroSection = () => {
         <div className="relative inline-block mb-8">
           <img
             src={logoImage}
-            alt="Bring Your Five logo"
+            alt="Bring Your 5"
             className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 drop-shadow-2xl rounded-full object-cover"
           />
           <span className="absolute bottom-2 right-2 text-foreground/70 text-xs font-semibold">™</span>
         </div>
 
+        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground tracking-wide mb-4">
+          Bring Your 5 — Find Local Pickup Basketball Games
+        </h1>
+
         <p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-8">
           Connect with local gyms, find pickup games at your skill level, and never miss a run again.
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="#runs" className="bg-primary text-primary-foreground font-display text-lg px-8 py-4 rounded-lg hover:brightness-110 transition-all duration-200 tracking-wider">
             Available Runs
