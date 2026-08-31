@@ -10,6 +10,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Install from "./pages/Install";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
+import Terms from "./pages/Terms";
 import Reel from "./pages/Reel";
 
 const queryClient = new QueryClient();
