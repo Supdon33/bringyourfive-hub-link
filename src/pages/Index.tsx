@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
+import Seo from "@/components/Seo";
+
 import GameCard, { type SkillLevel } from "@/components/GameCard";
 import SkillFilter from "@/components/SkillFilter";
 import StateFilter from "@/components/StateFilter";
@@ -150,7 +152,7 @@ const Index = () => {
           </div>
           <Sheet>
             <SheetTrigger asChild>
-              <button className="sm:hidden p-2 text-foreground">
+              <button aria-label="Open menu" className="sm:hidden p-2 text-foreground">
                 <Menu className="w-5 h-5" />
               </button>
             </SheetTrigger>
