@@ -127,7 +127,18 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
               placeholder="DELETE"
               autoComplete="off"
             />
+            <Label htmlFor="delete-reason" className="pt-2 block">
+              Reason for leaving (optional)
+            </Label>
+            <Textarea
+              id="delete-reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Tell us why you're deleting your account"
+              rows={3}
+            />
           </div>
+
 
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
