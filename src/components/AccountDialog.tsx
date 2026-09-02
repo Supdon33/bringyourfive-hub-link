@@ -33,12 +33,15 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
   const { user, username } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const [reason, setReason] = useState("");
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const { error } = await supabase.functions.invoke("delete-account");
+      const { error } = await supabase.functions.invoke("delete-account", {
+        body: { reason },
+      });
       if (error) throw error;
       toast({
         title: "Account deleted",
