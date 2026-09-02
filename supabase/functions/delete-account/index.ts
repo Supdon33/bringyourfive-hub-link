@@ -63,6 +63,58 @@ Deno.serve(async (req) => {
       reason,
     });
 
+    // Remove the matching HubSpot contact (best-effort — never blocks account deletion)
+    const HUBSPOT_TOKEN = Deno.env.get("HUBSPOT_ACCESS_TOKEN");
+    let hubspotDeleted = false;
+    if (HUBSPOT_TOKEN && userData.user.email) {
+      try {
+        const searchRes = await fetch(
+          "https://api.hubapi.com/crm/v3/objects/contacts/search",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${HUBSPOT_TOKEN}`,
+            },
+            body: JSON.stringify({
+              filterGroups: [
+                {
+                  filters: [
+                    { propertyName: "email", operator: "EQ", value: userData.user.email },
+                  ],
+                },
+              ],
+              properties: ["email"],
+              limit: 1,
+            }),
+          }
+        );
+        if (searchRes.ok) {
+          const searchData = await searchRes.json();
+          const contactId = searchData?.results?.[0]?.id;
+          if (contactId) {
+            const delRes = await fetch(
+              `https://api.hubapi.com/crm/v3/objects/contacts/${contactId}`,
+              {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${HUBSPOT_TOKEN}` },
+              }
+            );
+            hubspotDeleted = delRes.ok;
+            if (!delRes.ok) {
+              console.error(`HubSpot contact delete failed [${delRes.status}]: ${await delRes.text()}`);
+            }
+          } else {
+            console.log("No HubSpot contact found for email:", userData.user.email);
+          }
+        } else {
+          console.error(`HubSpot contact search failed [${searchRes.status}]: ${await searchRes.text()}`);
+        }
+      } catch (hubspotErr) {
+        console.error("HubSpot deletion error:", hubspotErr);
+      }
+    }
+
     // Best-effort cleanup of app data (in case FKs aren't cascading everywhere)
     await admin.from("run_participants").delete().eq("user_id", userId);
     await admin.from("active_sessions").delete().eq("user_id", userId);
