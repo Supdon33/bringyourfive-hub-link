@@ -40,6 +40,29 @@ Deno.serve(async (req) => {
     // Admin client — delete the user (cascades to app tables via FK ON DELETE CASCADE)
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
+    // Optional reason from the client
+    let reason: string | null = null;
+    try {
+      const body = await req.json();
+      reason = typeof body?.reason === "string" && body.reason.trim() ? body.reason.trim() : null;
+    } catch (_) {
+      // no body provided
+    }
+
+    // Record the deletion in the backend before removing the account
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("username")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    await admin.from("account_deletions").insert({
+      user_id: userId,
+      email: userData.user.email ?? null,
+      username: profile?.username ?? null,
+      reason,
+    });
+
     // Best-effort cleanup of app data (in case FKs aren't cascading everywhere)
     await admin.from("run_participants").delete().eq("user_id", userId);
     await admin.from("active_sessions").delete().eq("user_id", userId);
