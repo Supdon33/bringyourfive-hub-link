@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -33,12 +34,15 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
   const { user, username } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const [reason, setReason] = useState("");
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const { error } = await supabase.functions.invoke("delete-account");
+      const { error } = await supabase.functions.invoke("delete-account", {
+        body: { reason },
+      });
       if (error) throw error;
       toast({
         title: "Account deleted",
@@ -124,7 +128,18 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
               placeholder="DELETE"
               autoComplete="off"
             />
+            <Label htmlFor="delete-reason" className="pt-2 block">
+              Reason for leaving (optional)
+            </Label>
+            <Textarea
+              id="delete-reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Tell us why you're deleting your account"
+              rows={3}
+            />
           </div>
+
 
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>

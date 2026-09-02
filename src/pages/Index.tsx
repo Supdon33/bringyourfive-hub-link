@@ -427,6 +427,18 @@ const Index = () => {
               <Mail className="w-6 h-6" />
             </a>
           </div>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm">
+            <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+            {user && (
+              <button
+                onClick={() => setShowAccount(true)}
+                className="text-destructive hover:brightness-125 transition-colors"
+              >
+                Delete Account
+              </button>
+            )}
+          </div>
           <p className="mt-4">Connecting ballers with courts since 2025.</p>
           <p className="mt-1 text-xs">Bring Your 5™ is a trademark of JGS3 LLC. All rights reserved.</p>
         </div>
