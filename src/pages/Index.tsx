@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info, Trash2 } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info, Trash2, Instagram, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -389,7 +389,45 @@ const Index = () => {
       <footer className="border-t border-border py-10">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
           <BrandLogo size="small" />
-          <p className="mt-2">Connecting ballers with courts since 2025.</p>
+          <div className="flex items-center justify-center gap-5 mt-4">
+            <a
+              href="https://www.instagram.com/_bringyour5/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Instagram className="w-6 h-6" />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61581318346011&sk=about"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Facebook className="w-6 h-6" />
+            </a>
+            <a
+              href="https://x.com/Bringyour_5"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a
+              href="mailto:coach.bringyour5@gmail.com"
+              aria-label="Email"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Mail className="w-6 h-6" />
+            </a>
+          </div>
+          <p className="mt-4">Connecting ballers with courts since 2025.</p>
           <p className="mt-1 text-xs">Bring Your 5™ is a trademark of JGS3 LLC. All rights reserved.</p>
         </div>
       </footer>
