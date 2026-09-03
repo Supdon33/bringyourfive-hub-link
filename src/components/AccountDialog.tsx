@@ -183,6 +183,8 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ParentalControlsDialog open={parentalOpen} onOpenChange={setParentalOpen} />
     </>
   );
 };
