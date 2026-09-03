@@ -37,6 +37,7 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
   const [confirmText, setConfirmText] = useState("");
   const [reason, setReason] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [parentalOpen, setParentalOpen] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
