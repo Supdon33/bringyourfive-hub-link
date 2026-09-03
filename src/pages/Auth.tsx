@@ -232,6 +232,11 @@ const Auth = () => {
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
             </div>
             <div>
+              <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+              <Input id="dateOfBirth" type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} required max={new Date().toISOString().split("T")[0]} />
+              <p className="text-xs text-muted-foreground mt-1">You must be at least 13 years old.</p>
+            </div>
+            <div>
               <Label htmlFor="cellPhone">Cell Phone</Label>
               <Input id="cellPhone" type="tel" value={cellPhone} onChange={(e) => setCellPhone(e.target.value)} />
             </div>
