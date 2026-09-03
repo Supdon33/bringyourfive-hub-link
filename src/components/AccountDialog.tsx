@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Loader2 } from "lucide-react";
+import { Trash2, Loader2, Shield } from "lucide-react";
 import {
   Dialog,
   DialogContent,
