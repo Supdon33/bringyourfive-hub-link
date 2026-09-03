@@ -78,11 +78,13 @@ export type Database = {
           birth_year: number | null
           cell_phone: string | null
           created_at: string
+          date_of_birth: string | null
           email: string
           first_name: string
           home_state: string | null
           id: string
           last_name: string
+          parental_controls: Json | null
           sex: string | null
           skill_level: string | null
           updated_at: string
@@ -95,11 +97,13 @@ export type Database = {
           birth_year?: number | null
           cell_phone?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email: string
           first_name: string
           home_state?: string | null
           id?: string
           last_name: string
+          parental_controls?: Json | null
           sex?: string | null
           skill_level?: string | null
           updated_at?: string
@@ -112,11 +116,13 @@ export type Database = {
           birth_year?: number | null
           cell_phone?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string
           first_name?: string
           home_state?: string | null
           id?: string
           last_name?: string
+          parental_controls?: Json | null
           sex?: string | null
           skill_level?: string | null
           updated_at?: string

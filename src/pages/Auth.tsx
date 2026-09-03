@@ -40,8 +40,9 @@ const Auth = () => {
   const [homeState, setHomeState] = useState("");
   const [skillLevel, setSkillLevel] = useState("");
   const [sex, setSex] = useState("");
-    const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
-    const [signupTier, setSignupTier] = useState<"tier1" | "tier2">("tier1");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
+  const [signupTier, setSignupTier] = useState<"tier1" | "tier2">("tier1");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,10 +74,23 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firstName || !lastName || !username || !email || !password) {
-      toast({ title: "Missing fields", description: "Please fill all required fields.", variant: "destructive" });
+    if (!firstName || !lastName || !username || !email || !password || !dateOfBirth) {
+      toast({ title: "Missing fields", description: "Please fill all required fields, including date of birth.", variant: "destructive" });
       return;
     }
+
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    if (age < 13) {
+      toast({ title: "Age requirement", description: "You must be at least 13 years old to sign up.", variant: "destructive" });
+      return;
+    }
+
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
@@ -93,6 +107,7 @@ const Auth = () => {
           skill_level: skillLevel || null,
           sex: sex || null,
           home_state: homeState || null,
+          date_of_birth: dateOfBirth,
         },
       },
     });
@@ -215,6 +230,11 @@ const Auth = () => {
             <div>
               <Label htmlFor="password">Password *</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            </div>
+            <div>
+              <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+              <Input id="dateOfBirth" type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} required max={new Date().toISOString().split("T")[0]} />
+              <p className="text-xs text-muted-foreground mt-1">You must be at least 13 years old.</p>
             </div>
             <div>
               <Label htmlFor="cellPhone">Cell Phone</Label>

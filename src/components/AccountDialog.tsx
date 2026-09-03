@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Loader2 } from "lucide-react";
+import { Trash2, Loader2, Shield } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import ParentalControlsDialog from "@/components/ParentalControlsDialog";
 
 interface AccountDialogProps {
   open: boolean;
@@ -36,6 +37,7 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
   const [confirmText, setConfirmText] = useState("");
   const [reason, setReason] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [parentalOpen, setParentalOpen] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -81,6 +83,24 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
                 <span className="text-muted-foreground">Email: </span>
                 <span className="text-foreground break-all">{user?.email}</span>
               </div>
+            </div>
+
+            <div className="rounded-md border border-border bg-secondary/40 p-4">
+              <h4 className="font-display text-base text-foreground mb-1">
+                Parental Controls
+              </h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Set age-appropriate restrictions, block in-app purchases, and
+                protect settings with a PIN.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => setParentalOpen(true)}
+                className="w-full"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Manage Parental Controls
+              </Button>
             </div>
 
             <div className="rounded-md border border-destructive/40 bg-destructive/5 p-4">
@@ -163,6 +183,8 @@ const AccountDialog = ({ open, onOpenChange }: AccountDialogProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ParentalControlsDialog open={parentalOpen} onOpenChange={setParentalOpen} />
     </>
   );
 };
