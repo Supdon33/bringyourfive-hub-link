@@ -82,7 +82,7 @@ const ParentalControlsDialog = ({
 
     const { error } = await supabase
       .from("profiles")
-      .update({ parental_controls: controls })
+      .update({ parental_controls: controls as any })
       .eq("user_id", user.id);
 
     setSaving(false);
