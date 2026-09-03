@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import ParentalControlsDialog from "@/components/ParentalControlsDialog";
 
 interface AccountDialogProps {
   open: boolean;
