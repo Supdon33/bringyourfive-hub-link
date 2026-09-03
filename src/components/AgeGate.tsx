@@ -4,13 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 
 const MIN_AGE = 13;
@@ -85,19 +78,21 @@ const AgeGate = () => {
     }
   };
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-md" hideClose>
-        <DialogHeader>
-          <DialogTitle>Age Verification</DialogTitle>
-          <DialogDescription>
-            Please confirm your date of birth to continue using Bring Your 5.
-            You must be at least {MIN_AGE} years old.
-          </DialogDescription>
-        </DialogHeader>
+    <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-md border border-border bg-card rounded-xl p-6 shadow-xl space-y-4">
+        <div className="space-y-1.5 text-center sm:text-left">
+          <h2 className="text-lg font-semibold tracking-tight">Age Verification</h2>
+          <p className="text-sm text-muted-foreground">
+            Please confirm your date of birth to continue using Bring Your 5. You
+            must be at least {MIN_AGE} years old.
+          </p>
+        </div>
 
         {blocked ? (
-          <div className="space-y-4 mt-2">
+          <div className="space-y-4">
             <p className="text-sm text-destructive">
               You must be at least {MIN_AGE} years old to use this app. If you
               believe this is an error, please contact support at{" "}
@@ -114,7 +109,7 @@ const AgeGate = () => {
             </Button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="dob">Date of Birth *</Label>
               <Input
@@ -130,13 +125,13 @@ const AgeGate = () => {
               {saving ? "Verifying…" : "Continue"}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              This information is used only for age assurance and is not
-              shared publicly.
+              This information is used only for age assurance and is not shared
+              publicly.
             </p>
           </form>
         )}
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
