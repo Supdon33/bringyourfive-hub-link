@@ -5,13 +5,7 @@ import { resolve } from "path";
 
 const BASE_URL = "https://by5.run";
 
-interface SitemapEntry {
-  path: string;
-  changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority?: string;
-}
-
-const entries: SitemapEntry[] = [
+const entries = [
   { path: "/", changefreq: "daily", priority: "1.0" },
   { path: "/auth", changefreq: "monthly", priority: "0.6" },
   { path: "/install", changefreq: "monthly", priority: "0.6" },
@@ -19,7 +13,7 @@ const entries: SitemapEntry[] = [
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];
 
-function generateSitemap(list: SitemapEntry[]) {
+function generateSitemap(list) {
   const urls = list.map((e) =>
     [
       `  <url>`,
