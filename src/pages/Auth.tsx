@@ -40,8 +40,9 @@ const Auth = () => {
   const [homeState, setHomeState] = useState("");
   const [skillLevel, setSkillLevel] = useState("");
   const [sex, setSex] = useState("");
-    const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
-    const [signupTier, setSignupTier] = useState<"tier1" | "tier2">("tier1");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [accountType, setAccountType] = useState<"individual" | "gym">("individual");
+  const [signupTier, setSignupTier] = useState<"tier1" | "tier2">("tier1");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
