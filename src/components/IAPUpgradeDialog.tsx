@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -34,28 +35,32 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
+  const [loadError, setLoadError] = useState("");
+  const native = isNativeIOS();
 
   useEffect(() => {
-    if (!open || !isNativeIOS()) return;
+    if (!open || !native) return;
     (async () => {
       try {
         setLoading(true);
+        setLoadError("");
         await configurePurchases(user?.id);
         setProducts(getProducts([...GROUP_IDS[group]]));
       } catch (e: any) {
-        toast({ title: "Unable to load subscriptions", description: e?.message ?? String(e), variant: "destructive" });
+        setLoadError(e?.message ?? "Could not connect to the App Store.");
       } finally {
         setLoading(false);
       }
     })();
-  }, [open, user?.id, group, toast]);
+  }, [open, user?.id, group, native]);
 
   const handleBuy = async (product: any) => {
+    if (!user) return;
     setBusy(true);
     try {
       const ok = await purchaseProduct(product);
       if (ok) {
-        toast({ title: "Subscription active", description: "Thanks for supporting Bring Your 5!" });
+        toast({ title: "Purchase submitted", description: "Your membership will update when the App Store confirms the purchase." });
         onOpenChange(false);
       }
     } catch (e: any) {
@@ -78,50 +83,72 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
     }
   };
 
-  if (!isNativeIOS()) return null;
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{group === "gym" ? "Gym membership" : "Upgrade your membership"}</DialogTitle>
-          <DialogDescription>Purchases are handled securely through the App Store.</DialogDescription>
+          <DialogTitle>{group === "gym" ? "Gym Memberships" : "Player Memberships"}</DialogTitle>
+          <DialogDescription>{native ? "Choose a monthly membership. Payment is handled by the App Store." : "Explore memberships for pickup basketball runs."}</DialogDescription>
         </DialogHeader>
 
-        {loading ? (
+        {!native ? (
+          <div className="space-y-3">
+            {(group === "player" ? [
+              ["Standard State Search", "Find runs in your home state", "$5.99/month"],
+              ["BY5 Player Tier 2", "Find runs nationwide", "$9.99/month"],
+            ] : [
+              ["Gym Standard", "List your gym", "$10.99/month"],
+              ["Gym Featured", "Featured gym listing", "$14.99/month"],
+            ]).map(([label, benefit, price]) => (
+              <div key={label} className="border border-border rounded-md p-4 flex items-center justify-between gap-3">
+                <div><p className="font-display text-lg">{label}</p><p className="text-sm text-muted-foreground">{benefit}</p></div>
+                <span className="text-primary font-semibold shrink-0">{price}</span>
+              </div>
+            ))}
+            <p className="text-sm text-muted-foreground">Subscriptions are purchased in the iOS app. Prices shown are US prices; your App Store may show a different price.</p>
+          </div>
+        ) : loading ? (
           <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin" /></div>
-        ) : products.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4">No subscriptions available right now.</p>
+        ) : loadError || products.length === 0 ? (
+          <p role="alert" className="text-sm text-muted-foreground py-4">{loadError || "Subscriptions are not available from the App Store right now. Check your connection and try again."}</p>
         ) : (
           <div className="space-y-3">
-            {products.map((p) => {
+            {GROUP_IDS[group].map((id) => {
+              const p = products.find((product) => product.id === id);
+              if (!p) return null;
               const offer = p.getOffer?.() ?? p.offers?.[0];
-              const price = offer?.pricingPhases?.[0]?.price ?? "";
+              const price = offer?.pricingPhases?.[0]?.price;
+              const label = id === PRODUCT_TIER1 ? "Standard State Search" : id === PRODUCT_TIER2 ? "BY5 Player Tier 2" : id === PRODUCT_GYM_STANDARD ? "Gym Standard" : "Gym Featured";
+              const benefit = id === PRODUCT_TIER1 ? "Find runs in your home state" : id === PRODUCT_TIER2 ? "Find runs nationwide" : id === PRODUCT_GYM_STANDARD ? "List your gym" : "Featured gym listing";
               return (
-                <button
+                <Button
                   key={p.id}
                   onClick={() => handleBuy(p)}
-                  disabled={busy}
-                  className="w-full text-left border border-border rounded-lg p-4 hover:border-primary transition-colors disabled:opacity-50"
+                  disabled={busy || !offer || !price || !user}
+                  variant="outline"
+                  className="w-full h-auto min-h-20 whitespace-normal text-left border-border p-4 hover:border-primary"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-display text-lg">{p.title}</div>
-                      <div className="text-sm text-muted-foreground">{p.description}</div>
+                  <div className="flex w-full items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="font-display text-lg">{label}</div>
+                      <div className="text-sm text-muted-foreground">{benefit}</div>
                     </div>
-                    <div className="font-semibold">{price}</div>
+                    <div className="shrink-0 font-semibold text-primary">{price ? `${price}/mo` : "Unavailable"}</div>
                   </div>
-                </button>
+                </Button>
               );
             })}
           </div>
         )}
 
-        <div className="flex justify-between pt-2">
-          <Button variant="ghost" size="sm" onClick={handleRestore} disabled={busy}>
+        {!user && <Button asChild className="w-full" onClick={() => onOpenChange(false)}><Link to="/auth">Sign in to subscribe</Link></Button>}
+        {native && <div className="flex justify-between items-center pt-2">
+          <Button variant="ghost" size="sm" onClick={handleRestore} disabled={busy || loading || !user}>
             Restore purchases
           </Button>
-        </div>
+          {loadError && <Button variant="outline" size="sm" onClick={() => { onOpenChange(false); setTimeout(() => onOpenChange(true), 0); }}>Try again</Button>}
+        </div>}
+        <p className="text-xs text-muted-foreground">Auto-renews monthly until canceled in your Apple account. <Link className="underline" to="/terms" onClick={() => onOpenChange(false)}>Terms of Use</Link> · <Link className="underline" to="/privacy" onClick={() => onOpenChange(false)}>Privacy Policy</Link></p>
       </DialogContent>
     </Dialog>
   );

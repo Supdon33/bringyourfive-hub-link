@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info, Trash2, Instagram, Facebook } from "lucide-react";
+import { Plus, Menu, LogOut, MoreVertical, Mail, Shield, User as UserIcon, Info, Trash2, Instagram, Facebook, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -23,6 +23,7 @@ import AccountDialog from "@/components/AccountDialog";
 import IAPUpgradeDialog from "@/components/IAPUpgradeDialog";
 import AboutDialog from "@/components/AboutDialog";
 import { isNativeIOS } from "@/lib/purchases";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { useRuns } from "@/hooks/useRuns";
@@ -49,7 +50,7 @@ const Index = () => {
     id: string; title: string; gymName: string; location: string;
     time: string; skillLevel: SkillLevel; spotsTotal: number; spotsFilled: number;
   } | null>(null);
-  const { user, username, hasActiveSub, hasTier, loading, signOut } = useAuth();
+  const { user, username, hasTier, loading, signOut } = useAuth();
 
   // Auto-set state filter for basic users
   useEffect(() => {
@@ -122,6 +123,7 @@ const Index = () => {
           <div className="hidden sm:flex items-center gap-3">
             {user ? (
               <>
+                <Button onClick={() => setShowUpgrade(true)} size="sm"><Crown /> Player Memberships</Button>
                 <span className="text-sm text-muted-foreground">
                   {username || user.user_metadata?.first_name || user.email}
                 </span>
@@ -135,6 +137,7 @@ const Index = () => {
               </>
             ) : (
               <>
+                <Button onClick={() => setShowUpgrade(true)} variant="outline" size="sm"><Crown /> Memberships</Button>
                 <Link
                   to="/auth"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors font-semibold"
@@ -172,6 +175,9 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                   Privacy Notice
                 </Link>
+                <Button onClick={() => setShowUpgrade(true)} className="w-full justify-start">
+                    <Crown /> Player Memberships
+                </Button>
                 {user && (
                   <button onClick={() => setShowAccount(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
                     <UserIcon className="w-4 h-4" />
@@ -216,6 +222,11 @@ const Index = () => {
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:flex-wrap">
             {user && (
+              <Button onClick={() => setShowUpgrade(true)} className="shrink-0">
+                <Crown /> Player Memberships
+              </Button>
+            )}
+            {user && (
               <button
                 onClick={() => setShowListRun(true)}
                 className="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-5 py-2.5 rounded-lg hover:brightness-110 transition-all shrink-0"
@@ -238,14 +249,6 @@ const Index = () => {
                 Basic members see runs in their home state. Upgrade to Premium for all states.
               </span>
             )}
-            {!hasTier("tier2") && isNativeIOS() && (
-              <button
-                onClick={() => setShowUpgrade(true)}
-                className="ml-2 text-xs font-semibold text-primary underline underline-offset-2"
-              >
-                Upgrade
-              </button>
-            )}
           </div>
         )}
 
@@ -263,27 +266,6 @@ const Index = () => {
             >
               Sign In
             </Link>
-          </div>
-        ) : !loading && false ? (
-          <div className="text-center py-20 border border-border rounded-lg bg-card">
-            <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="font-display text-2xl text-foreground mb-2">Subscribers Only</h3>
-            <p className="text-muted-foreground mb-1">
-              {!user
-                ? "Sign up and subscribe to see available runs."
-                : "An active subscription is required to view runs."}
-            </p>
-            <p className="text-muted-foreground text-sm mb-6">
-              Tier 1 (Local): $2.99/mo · Tier 2 (Nationwide): $4.99/mo
-            </p>
-            {!user && (
-              <Link
-                to="/auth"
-                className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-3 rounded-lg hover:brightness-110 transition-all"
-              >
-                Get Started
-              </Link>
-            )}
           </div>
         ) : runsLoading ? (
           <div className="flex justify-center py-16">
@@ -318,7 +300,7 @@ const Index = () => {
 
             {runs.length === 0 && (
               <div className="text-center py-16 text-muted-foreground">
-                <p className="text-lg">No games at this level right now.</p>
+                <p className="text-lg">No runs at this level right now.</p>
                 <p className="text-sm mt-1">Check back soon or try another skill level.</p>
               </div>
             )}

@@ -35,13 +35,14 @@ let initialized = false;
 let readyPromise: Promise<void> | null = null;
 
 export async function configurePurchases(appUserId?: string) {
-  if (!isNativeIOS() || initialized) return readyPromise ?? Promise.resolve();
+  if (!isNativeIOS()) return;
   const cdv = CDV();
   const s = store();
-  if (!cdv || !s) return;
+  if (!cdv || !s) throw new Error("The App Store is not ready yet. Please reopen the app and try again.");
+  if (appUserId) s.applicationUsername = () => appUserId;
+  if (initialized) return readyPromise ?? Promise.resolve();
 
   s.verbosity = cdv.LogLevel.WARNING;
-  if (appUserId) s.applicationUsername = () => appUserId;
 
   s.register(
     ALL_PRODUCT_IDS.map((id) => ({
@@ -51,19 +52,32 @@ export async function configurePurchases(appUserId?: string) {
     }))
   );
 
+  // No receipt validator is configured. The plugin's `verified` event never fires
+  // without one, so listen for local StoreKit receipts instead of leaving orders open.
   s.when()
-    .approved((transaction: any) => transaction.verify())
-    .verified((receipt: any) => {
-      receipt.finish();
-      syncEntitlementsToBackend();
-    });
+    .approved(async (transaction: any) => {
+      try {
+        await syncEntitlementsToBackend();
+        await transaction.finish();
+      } catch (error) {
+        console.error("Could not deliver App Store membership", error);
+      }
+    })
+    .receiptUpdated(() => { void syncEntitlementsToBackend().catch(console.error); });
+  s.when().receiptsReady(() => { void syncEntitlementsToBackend().catch(console.error); });
 
-  readyPromise = new Promise<void>((resolve) => {
-    s.ready(() => resolve());
-    s.initialize([cdv.Platform.APPLE_APPSTORE]).catch(() => resolve());
-  });
+  readyPromise = s.initialize([cdv.Platform.APPLE_APPSTORE]).then(() => new Promise<void>((resolve) => {
+    if (s.isReady) resolve();
+    else s.ready(() => resolve());
+  }));
   initialized = true;
-  await readyPromise;
+  try {
+    await readyPromise;
+  } catch (error) {
+    initialized = false;
+    readyPromise = null;
+    throw error;
+  }
 }
 
 export function getProducts(filterIds?: string[]): any[] {
@@ -86,7 +100,8 @@ export async function purchaseProduct(product: any): Promise<boolean> {
 }
 
 export async function restorePurchases() {
-  await store().restorePurchases();
+  const result = await store().restorePurchases();
+  if (result?.isError) throw new Error(result.message ?? "Could not restore purchases");
   await syncEntitlementsToBackend();
 }
 
@@ -95,10 +110,13 @@ async function syncEntitlementsToBackend() {
   const user = userRes.user;
   if (!user) return;
   const s = store();
+  if (!s) return;
   const active = ALL_PRODUCT_IDS.filter((id) => s.owned(id)).map((id) => PRODUCT_TO_TIER[id]);
   for (const tier of active) {
-    await supabase
+    const { error } = await supabase
       .from("subscriptions")
       .upsert({ user_id: user.id, tier, status: "active" }, { onConflict: "user_id,tier" });
+    if (error) throw error;
   }
+  window.dispatchEvent(new Event("by5:subscriptions-updated"));
 }
