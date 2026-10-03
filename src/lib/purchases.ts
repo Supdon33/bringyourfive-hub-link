@@ -52,12 +52,19 @@ export async function configurePurchases(appUserId?: string) {
     }))
   );
 
+  // No receipt validator is configured. The plugin's `verified` event never fires
+  // without one, so listen for local StoreKit receipts instead of leaving orders open.
   s.when()
-    .approved((transaction: any) => transaction.verify())
-    .verified(async (receipt: any) => {
-      await syncEntitlementsToBackend();
-      await receipt.finish();
-    });
+    .approved(async (transaction: any) => {
+      try {
+        await syncEntitlementsToBackend();
+        await transaction.finish();
+      } catch (error) {
+        console.error("Could not deliver App Store membership", error);
+      }
+    })
+    .receiptUpdated(() => { void syncEntitlementsToBackend().catch(console.error); });
+  s.when().receiptsReady(() => { void syncEntitlementsToBackend().catch(console.error); });
 
   readyPromise = s.initialize([cdv.Platform.APPLE_APPSTORE]).then(() => new Promise<void>((resolve) => {
     if (s.isReady) resolve();

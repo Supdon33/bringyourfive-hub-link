@@ -174,7 +174,7 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                   Privacy Notice
                 </Link>
-                {user && (
+                {user && isNativeIOS() && (
                   <Button onClick={() => setShowUpgrade(true)} className="w-full justify-start" disabled={!isNativeIOS()}>
                     <Crown /> Player Memberships
                   </Button>
