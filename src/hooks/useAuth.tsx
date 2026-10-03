@@ -31,6 +31,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
+    const refreshSubscriptions = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) return;
+      const { data } = await supabase.from("subscriptions").select("tier, status").eq("user_id", currentUser.id).eq("status", "active");
+      setSubscriptions((data as Subscription[]) || []);
+    };
+    window.addEventListener("by5:subscriptions-updated", refreshSubscriptions);
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session);
@@ -68,7 +75,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     });
 
-    return () => authListener.unsubscribe();
+    return () => {
+      authListener.unsubscribe();
+      window.removeEventListener("by5:subscriptions-updated", refreshSubscriptions);
+    };
   }, []);
 
   const hasActiveSub = subscriptions.length > 0;
