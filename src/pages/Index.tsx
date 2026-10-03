@@ -123,7 +123,7 @@ const Index = () => {
           <div className="hidden sm:flex items-center gap-3">
             {user ? (
               <>
-                {isNativeIOS() && <Button onClick={() => setShowUpgrade(true)} size="sm"><Crown /> Player Memberships</Button>}
+                <Button onClick={() => setShowUpgrade(true)} size="sm"><Crown /> Player Memberships</Button>
                 <span className="text-sm text-muted-foreground">
                   {username || user.user_metadata?.first_name || user.email}
                 </span>
@@ -137,6 +137,7 @@ const Index = () => {
               </>
             ) : (
               <>
+                <Button onClick={() => setShowUpgrade(true)} variant="outline" size="sm"><Crown /> Memberships</Button>
                 <Link
                   to="/auth"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors font-semibold"
@@ -174,11 +175,9 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                   Privacy Notice
                 </Link>
-                {user && isNativeIOS() && (
-                  <Button onClick={() => setShowUpgrade(true)} className="w-full justify-start" disabled={!isNativeIOS()}>
+                <Button onClick={() => setShowUpgrade(true)} className="w-full justify-start">
                     <Crown /> Player Memberships
-                  </Button>
-                )}
+                </Button>
                 {user && (
                   <button onClick={() => setShowAccount(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
                     <UserIcon className="w-4 h-4" />
@@ -222,7 +221,7 @@ const Index = () => {
             <p className="text-muted-foreground mt-1">Find a run that matches your level</p>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:flex-wrap">
-            {user && isNativeIOS() && (
+            {user && (
               <Button onClick={() => setShowUpgrade(true)} className="shrink-0">
                 <Crown /> Player Memberships
               </Button>
