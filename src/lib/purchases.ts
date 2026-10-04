@@ -1,6 +1,5 @@
 import { Capacitor } from "@capacitor/core";
 import "cordova-plugin-purchase";
-import { supabase } from "@/integrations/supabase/client";
 
 // Product identifiers must match what you create in App Store Connect exactly.
 export const PRODUCT_TIER1 = "com.bringyour5.tier001.monthly";
@@ -52,19 +51,16 @@ export async function configurePurchases(appUserId?: string) {
     }))
   );
 
-  // No receipt validator is configured. The plugin's `verified` event never fires
-  // without one, so listen for local StoreKit receipts instead of leaving orders open.
+  // A locally reported purchase is not proof of an active subscription.
+  // Do not grant account-wide access from an unverified client receipt.
   s.when()
     .approved(async (transaction: any) => {
       try {
-        await syncEntitlementsToBackend();
         await transaction.finish();
       } catch (error) {
-        console.error("Could not deliver App Store membership", error);
+        console.error("Could not finish App Store transaction", error);
       }
-    })
-    .receiptUpdated(() => { void syncEntitlementsToBackend().catch(console.error); });
-  s.when().receiptsReady(() => { void syncEntitlementsToBackend().catch(console.error); });
+    });
 
   readyPromise = s.initialize([cdv.Platform.APPLE_APPSTORE]).then(() => new Promise<void>((resolve) => {
     if (s.isReady) resolve();
@@ -102,21 +98,4 @@ export async function purchaseProduct(product: any): Promise<boolean> {
 export async function restorePurchases() {
   const result = await store().restorePurchases();
   if (result?.isError) throw new Error(result.message ?? "Could not restore purchases");
-  await syncEntitlementsToBackend();
-}
-
-async function syncEntitlementsToBackend() {
-  const { data: userRes } = await supabase.auth.getUser();
-  const user = userRes.user;
-  if (!user) return;
-  const s = store();
-  if (!s) return;
-  const active = ALL_PRODUCT_IDS.filter((id) => s.owned(id)).map((id) => PRODUCT_TO_TIER[id]);
-  for (const tier of active) {
-    const { error } = await supabase
-      .from("subscriptions")
-      .upsert({ user_id: user.id, tier, status: "active" }, { onConflict: "user_id,tier" });
-    if (error) throw error;
-  }
-  window.dispatchEvent(new Event("by5:subscriptions-updated"));
 }

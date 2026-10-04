@@ -246,7 +246,7 @@ const Index = () => {
             <StateFilter selected={selectedState} onChange={setSelectedState} />
             {!hasTier("tier2") && (
               <span className="text-xs text-muted-foreground italic">
-                Basic members see runs in their home state. Upgrade to Premium for all states.
+                A player membership is required to search runs. Tier 2 includes all states.
               </span>
             )}
           </div>

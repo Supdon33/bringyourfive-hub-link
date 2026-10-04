@@ -278,7 +278,7 @@ const Auth = () => {
             )}
             {/* Membership Tier Selection */}
             <div className="space-y-2">
-              <Label>Membership *</Label>
+              <Label>Membership interest (purchase after signup)</Label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
