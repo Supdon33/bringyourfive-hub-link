@@ -1,6 +1,5 @@
 import { Capacitor } from "@capacitor/core";
 import "cordova-plugin-purchase";
-import { supabase } from "@/integrations/supabase/client";
 
 // Product identifiers must match what you create in App Store Connect exactly.
 export const PRODUCT_TIER1 = "com.bringyour5.tier001.monthly";
@@ -26,6 +25,9 @@ export const ALL_PRODUCT_IDS = [
 
 export const isNativeIOS = () =>
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
+
+export const isNativeIOSDevice = () =>
+  isNativeIOS() && !/simulator/i.test(navigator.userAgent);
 
 // cordova-plugin-purchase exposes `CdvPurchase` on window.
 const store = () => (globalThis as any).CdvPurchase?.store as any;
