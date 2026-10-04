@@ -26,9 +26,6 @@ export const ALL_PRODUCT_IDS = [
 export const isNativeIOS = () =>
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
 
-export const isNativeIOSDevice = () =>
-  isNativeIOS() && !/simulator/i.test(navigator.userAgent);
-
 // cordova-plugin-purchase exposes `CdvPurchase` on window.
 const store = () => (globalThis as any).CdvPurchase?.store as any;
 const CDV = () => (globalThis as any).CdvPurchase as any;
