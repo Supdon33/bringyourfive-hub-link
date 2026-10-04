@@ -106,7 +106,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
           </div>
         )}
 
-        {!user && <Button asChild className="w-full" onClick={() => onOpenChange(false)}><Link to="/auth">Sign in to subscribe</Link></Button>}
+        {!user && !native && <Button asChild className="w-full" onClick={() => onOpenChange(false)}><Link to="/auth">Sign in to explore runs</Link></Button>}
         {native && <div className="flex justify-between items-center pt-2">
           {loadError && <Button variant="outline" size="sm" onClick={() => { onOpenChange(false); setTimeout(() => onOpenChange(true), 0); }}>Try again</Button>}
         </div>}
