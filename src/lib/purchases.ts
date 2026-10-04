@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core";
+import { supabase } from "@/integrations/supabase/client";
 import "cordova-plugin-purchase";
 
 // Product identifiers must match what you create in App Store Connect exactly.
@@ -52,13 +53,15 @@ export async function configurePurchases(appUserId?: string) {
   );
 
   // A locally reported purchase is not proof of an active subscription.
-  // Do not grant account-wide access from an unverified client receipt.
+  // The receipt is verified with Apple by the verify-purchase function,
+  // which is the only path that may grant account-wide access.
   s.when()
     .approved(async (transaction: any) => {
       try {
+        await syncReceiptToBackend();
         await transaction.finish();
       } catch (error) {
-        console.error("Could not finish App Store transaction", error);
+        console.error("Could not verify App Store transaction", error);
       }
     });
 
@@ -98,4 +101,20 @@ export async function purchaseProduct(product: any): Promise<boolean> {
 export async function restorePurchases() {
   const result = await store().restorePurchases();
   if (result?.isError) throw new Error(result.message ?? "Could not restore purchases");
+  await syncReceiptToBackend();
+}
+
+// Sends the App Store receipt to the backend, which verifies it with Apple
+// and activates the matching subscription tiers server-side.
+export async function syncReceiptToBackend(): Promise<string[]> {
+  const s = store();
+  const receiptData: string | undefined = s?.appStoreReceipt;
+  if (!receiptData) throw new Error("No App Store receipt is available yet.");
+  const { data, error } = await supabase.functions.invoke("verify-purchase", {
+    body: { receiptData },
+  });
+  if (error) throw new Error(error.message ?? "Purchase verification failed.");
+  if (data?.error) throw new Error(data.error);
+  window.dispatchEvent(new Event("by5:subscriptions-updated"));
+  return (data?.active as string[]) ?? [];
 }

@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 import {
   configurePurchases,
   getProducts,
   isNativeIOS,
+  purchaseProduct,
+  restorePurchases,
   PRODUCT_TIER1,
   PRODUCT_TIER2,
   PRODUCT_GYM_STANDARD,
@@ -31,7 +34,32 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
   const [loadError, setLoadError] = useState("");
+  const [busy, setBusy] = useState(false);
   const native = isNativeIOS();
+
+  const handleBuy = async (product: any) => {
+    try {
+      setBusy(true);
+      const ordered = await purchaseProduct(product);
+      if (ordered) toast.success("Purchase submitted. Your membership activates once Apple confirms it.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Purchase failed. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    try {
+      setBusy(true);
+      await restorePurchases();
+      toast.success("Purchases restored.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Could not restore purchases.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   useEffect(() => {
     if (!open || !native) return;
@@ -54,7 +82,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
       <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{group === "gym" ? "Gym Memberships" : "Player Memberships"}</DialogTitle>
-          <DialogDescription>{native ? "App Store memberships are temporarily unavailable while purchase verification is set up." : "Explore memberships for pickup basketball runs."}</DialogDescription>
+          <DialogDescription>{native ? "Choose a membership. Payment is handled securely by Apple." : "Explore memberships for pickup basketball runs."}</DialogDescription>
         </DialogHeader>
 
         {!native ? (
@@ -89,7 +117,8 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
               return (
                 <Button
                   key={p.id}
-                  disabled
+                  disabled={busy || !price}
+                  onClick={() => handleBuy(p)}
                   variant="outline"
                   className="w-full h-auto min-h-20 whitespace-normal text-left border-border p-4 hover:border-primary"
                 >
@@ -108,7 +137,10 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
 
         {!user && !native && <Button asChild className="w-full" onClick={() => onOpenChange(false)}><Link to="/auth">Sign in to explore runs</Link></Button>}
         {native && <div className="flex justify-between items-center pt-2">
-          {loadError && <Button variant="outline" size="sm" onClick={() => { onOpenChange(false); setTimeout(() => onOpenChange(true), 0); }}>Try again</Button>}
+          {loadError ? <Button variant="outline" size="sm" onClick={() => { onOpenChange(false); setTimeout(() => onOpenChange(true), 0); }}>Try again</Button> : <span />}
+          <Button variant="ghost" size="sm" disabled={busy} onClick={handleRestore}>
+            {busy && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Restore purchases
+          </Button>
         </div>}
         <p className="text-xs text-muted-foreground">Auto-renews monthly until canceled in your Apple account. <Link className="underline" to="/terms" onClick={() => onOpenChange(false)}>Terms of Use</Link> · <Link className="underline" to="/privacy" onClick={() => onOpenChange(false)}>Privacy Policy</Link></p>
       </DialogContent>
