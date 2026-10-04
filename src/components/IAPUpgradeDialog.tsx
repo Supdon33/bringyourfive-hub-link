@@ -60,7 +60,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
     try {
       const ok = await purchaseProduct(product);
       if (ok) {
-        toast({ title: "Purchase submitted", description: "Your membership will update when the App Store confirms the purchase." });
+        toast({ title: "Purchase submitted", description: "Your purchase is being processed. Membership access is not yet available." });
         onOpenChange(false);
       }
     } catch (e: any) {
@@ -74,7 +74,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
     setBusy(true);
     try {
       await restorePurchases();
-      toast({ title: "Purchases restored" });
+      toast({ title: "App Store purchases checked", description: "Membership access is not yet available." });
       onOpenChange(false);
     } catch (e: any) {
       toast({ title: "Restore failed", description: e?.message ?? String(e), variant: "destructive" });
