@@ -9,8 +9,6 @@ import {
   configurePurchases,
   getProducts,
   isNativeIOS,
-  purchaseProduct,
-  restorePurchases,
   PRODUCT_TIER1,
   PRODUCT_TIER2,
   PRODUCT_GYM_STANDARD,
@@ -33,7 +31,6 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [loadError, setLoadError] = useState("");
   const native = isNativeIOS();
@@ -53,35 +50,6 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
       }
     })();
   }, [open, user?.id, group, native]);
-
-  const handleBuy = async (product: any) => {
-    if (!user) return;
-    setBusy(true);
-    try {
-      const ok = await purchaseProduct(product);
-      if (ok) {
-        toast({ title: "Purchase submitted", description: "Your purchase is being processed. Membership access is not yet available." });
-        onOpenChange(false);
-      }
-    } catch (e: any) {
-      toast({ title: "Purchase failed", description: e?.message ?? String(e), variant: "destructive" });
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleRestore = async () => {
-    setBusy(true);
-    try {
-      await restorePurchases();
-      toast({ title: "App Store purchases checked", description: "Membership access is not yet available." });
-      onOpenChange(false);
-    } catch (e: any) {
-      toast({ title: "Restore failed", description: e?.message ?? String(e), variant: "destructive" });
-    } finally {
-      setBusy(false);
-    }
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -123,7 +91,6 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
               return (
                 <Button
                   key={p.id}
-                  onClick={() => handleBuy(p)}
                   disabled
                   variant="outline"
                   className="w-full h-auto min-h-20 whitespace-normal text-left border-border p-4 hover:border-primary"
