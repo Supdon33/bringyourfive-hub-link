@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import {
   configurePurchases,
@@ -29,7 +28,6 @@ const GROUP_IDS = {
 
 const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
   const { user } = useAuth();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
   const [loadError, setLoadError] = useState("");
@@ -56,7 +54,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
       <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{group === "gym" ? "Gym Memberships" : "Player Memberships"}</DialogTitle>
-        <DialogDescription>{native ? "App Store memberships are temporarily unavailable while purchase verification is set up." : "Explore memberships for pickup basketball runs."}</DialogDescription>
+          <DialogDescription>{native ? "App Store memberships are temporarily unavailable while purchase verification is set up." : "Explore memberships for pickup basketball runs."}</DialogDescription>
         </DialogHeader>
 
         {!native ? (
