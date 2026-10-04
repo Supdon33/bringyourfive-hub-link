@@ -88,7 +88,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
       <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{group === "gym" ? "Gym Memberships" : "Player Memberships"}</DialogTitle>
-          <DialogDescription>{native ? "Choose a monthly membership. Payment is handled by the App Store." : "Explore memberships for pickup basketball runs."}</DialogDescription>
+        <DialogDescription>{native ? "App Store memberships are temporarily unavailable while purchase verification is set up." : "Explore memberships for pickup basketball runs."}</DialogDescription>
         </DialogHeader>
 
         {!native ? (
@@ -124,7 +124,7 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
                 <Button
                   key={p.id}
                   onClick={() => handleBuy(p)}
-                  disabled={busy || !offer || !price || !user}
+                  disabled
                   variant="outline"
                   className="w-full h-auto min-h-20 whitespace-normal text-left border-border p-4 hover:border-primary"
                 >
@@ -143,9 +143,6 @@ const IAPUpgradeDialog = ({ open, onOpenChange, group = "player" }: Props) => {
 
         {!user && <Button asChild className="w-full" onClick={() => onOpenChange(false)}><Link to="/auth">Sign in to subscribe</Link></Button>}
         {native && <div className="flex justify-between items-center pt-2">
-          <Button variant="ghost" size="sm" onClick={handleRestore} disabled={busy || loading || !user}>
-            Restore purchases
-          </Button>
           {loadError && <Button variant="outline" size="sm" onClick={() => { onOpenChange(false); setTimeout(() => onOpenChange(true), 0); }}>Try again</Button>}
         </div>}
         <p className="text-xs text-muted-foreground">Auto-renews monthly until canceled in your Apple account. <Link className="underline" to="/terms" onClick={() => onOpenChange(false)}>Terms of Use</Link> · <Link className="underline" to="/privacy" onClick={() => onOpenChange(false)}>Privacy Policy</Link></p>
