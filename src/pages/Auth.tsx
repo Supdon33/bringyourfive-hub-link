@@ -124,7 +124,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-[calc(2rem+env(safe-area-inset-top))]">
       <Seo
         title="Sign In or Join – Bring Your Five"
         description="Sign in or create your Bring Your 5 account to find pickup basketball runs at your skill level near you."

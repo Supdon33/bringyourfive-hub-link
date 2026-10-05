@@ -99,3 +99,10 @@
                 0 8px 30px hsl(25 95% 53% / 0.1);
   }
 }
+
+@layer utilities {
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .px-safe { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+  .hero-safe-top { padding-top: calc(6rem + env(safe-area-inset-top)); }
+}
