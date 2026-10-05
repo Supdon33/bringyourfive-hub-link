@@ -80,7 +80,7 @@ const Index = () => {
         path="/"
       />
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border pt-safe px-safe">
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <BrandLogo />
           <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
@@ -159,7 +159,7 @@ const Index = () => {
                 <Menu className="w-5 h-5" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-64 bg-background border-border">
+            <SheetContent side="right" className="w-72 bg-background border-border pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] overflow-y-auto">
               <nav className="flex flex-col gap-6 mt-8">
                 <button onClick={() => setShowAbout(true)} className="text-lg font-display text-foreground hover:text-primary transition-colors text-left flex items-center gap-2">
                   <Info className="w-4 h-4" />
