@@ -25,7 +25,7 @@ const Privacy = () => {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 pt-24 pb-20 max-w-3xl">
+      <main className="container mx-auto px-4 hero-safe-top pb-20 max-w-3xl">
         <h1 className="font-display text-3xl sm:text-4xl text-foreground mb-8">
           Terms of Service &amp; Privacy Policy
         </h1>
