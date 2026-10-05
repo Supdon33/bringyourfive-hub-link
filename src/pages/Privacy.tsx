@@ -11,7 +11,7 @@ const Privacy = () => {
         description="How Bring Your 5 collects, uses, and protects your data, including location, profile, and account deletion requests."
         path="/privacy"
       />
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border pt-safe px-safe">
 
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <BrandLogo />
