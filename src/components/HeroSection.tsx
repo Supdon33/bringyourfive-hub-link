@@ -1,5 +1,6 @@
 import heroImage from "@/assets/hero-court.jpg";
 import logoImage from "@/assets/bring-your-five-logo.jpeg";
+import AppStoreBadge from "@/components/AppStoreBadge";
 
 const HeroSection = () => {
   return (
@@ -41,6 +42,8 @@ const HeroSection = () => {
             List Your Gym
           </a>
         </div>
+
+        <AppStoreBadge className="mt-6" />
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
