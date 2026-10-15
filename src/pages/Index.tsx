@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import HeroSection from "@/components/HeroSection";
 import BrandLogo from "@/components/BrandLogo";
+import AppStoreBadge from "@/components/AppStoreBadge";
 import Seo from "@/components/Seo";
 
 import GameCard, { type SkillLevel } from "@/components/GameCard";
@@ -371,6 +372,9 @@ const Index = () => {
       <footer className="border-t border-border py-10">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
           <BrandLogo size="small" />
+          <div className="mt-4 flex justify-center">
+            <AppStoreBadge />
+          </div>
           <div className="flex items-center justify-center gap-5 mt-4">
             <a
               href="https://www.instagram.com/_bringyour5/"
