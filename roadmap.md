@@ -1,5 +1,7 @@
 # Apple review follow-up
 
+- [x] Add consent-based HubSpot website tracking using Jay's supplied tracking code, excluding native apps; verified acceptance, decline, and withdrawal. Publish to activate on by5.run.
+
 - [x] Remove all Lovable branding from the site and code; badge hidden on published deployments.
 
 - [x] Make both iOS player subscriptions prominent, purchasable, and accurately reported. Receipts are verified with Apple by the verify-purchase function before access is granted.
