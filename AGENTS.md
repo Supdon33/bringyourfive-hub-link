@@ -1,6 +1,6 @@
 # Architecture decisions
 
-- Load HubSpot website analytics through WebsiteAnalytics only after explicit browser consent on production custom domains; exclude Capacitor apps and preview hosts to preserve native privacy and prevent test traffic, and track route pathnames without auth query/hash data.
+- Load the HubSpot embed code from index.html on production custom domains only, so HubSpot's installation test can detect it; consent is handled by HubSpot's own cookie banner. Exclude Capacitor apps and preview hosts to preserve native privacy and prevent test traffic; WebsiteAnalytics reports later route pathnames without auth query/hash data.
 
 - Keep native App Store purchase discovery in the shared React experience and invoke StoreKit only on iOS; browser previews cannot process Apple payments.
 - Treat StoreKit product metadata as the source of displayed prices and availability; static prices can diverge by storefront.
