@@ -167,8 +167,8 @@ const Privacy = () => {
             <p>You can control location permissions in your device settings.</p>
 
             <h4 className="font-semibold text-foreground mt-4 mb-1">D. Website Analytics Cookies</h4>
-            <p>On by5.run, we use HubSpot website analytics only after you accept optional analytics cookies. HubSpot may collect page visits, referral information, browser and device information, IP address, and cookie identifiers to help us understand website traffic. This website tracking is not loaded in our native iPhone, iPad, or Android app.</p>
-            <p>You may decline optional analytics and continue using the website, or change your choice through Cookie settings. Declining after accepting stops future website analytics on this browser; it does not delete information already collected. To request deletion, contact coach.bringyour5@gmail.com.</p>
+            <p>On by5.run, we use HubSpot website analytics. HubSpot may collect page visits, referral information, browser and device information, IP address, and cookie identifiers to help us understand website traffic. HubSpot's cookie banner asks for your choice about analytics cookies when you visit. This website tracking is not loaded in our native iPhone, iPad, or Android app.</p>
+            <p>You may decline analytics cookies in the banner and continue using the website. Declining stops analytics cookies on this browser; it does not delete information already collected. To request deletion, contact coach.bringyour5@gmail.com.</p>
 
             <h3 className="font-display text-lg text-foreground mt-8 mb-2">2. How We Use Your Information</h3>
             <p>We use your information to:</p>

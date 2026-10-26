@@ -1,6 +1,5 @@
 export const HUBSPOT_SCRIPT_URL = "https://js-na2.hs-scripts.com/245314963.js";
-export const ANALYTICS_CONSENT_KEY = "by5:website-analytics-consent";
-export type AnalyticsConsent = "accepted" | "declined";
+const WEBSITE_HOSTS = ["by5.run", "www.by5.run"];
 
 declare global {
   interface Window {
@@ -8,19 +7,12 @@ declare global {
   }
 }
 
-export function canTrackWebsite(native: boolean, hostname: string, consent: AnalyticsConsent | null) {
-  return !native && ["by5.run", "www.by5.run"].includes(hostname) && consent === "accepted";
+// HubSpot's own cookie banner (Privacy & Consent settings in HubSpot) handles visitor consent.
+export function canTrackWebsite(native: boolean, hostname: string) {
+  return !native && WEBSITE_HOSTS.includes(hostname);
 }
 
-export function readAnalyticsConsent(): AnalyticsConsent | null {
-  try {
-    const value = localStorage.getItem(ANALYTICS_CONSENT_KEY);
-    return value === "accepted" || value === "declined" ? value : null;
-  } catch {
-    return null;
-  }
-}
-
+/** Records an in-app page change. The first page view is recorded by the loader in index.html. */
 export function trackWebsitePage(path: string) {
   // Exclude queries and hashes: auth links can contain tokens and personal data.
   const safePath = path.split(/[?#]/)[0];
@@ -30,7 +22,7 @@ export function trackWebsitePage(path: string) {
     window._hsq.push(["trackPageView"]);
     return;
   }
-  // HubSpot records the initial page view when the loader initializes.
+  // Fallback if the index.html loader did not run; HubSpot records a view when it initializes.
   const script = document.createElement("script");
   script.id = "hs-script-loader";
   script.src = HUBSPOT_SCRIPT_URL;
