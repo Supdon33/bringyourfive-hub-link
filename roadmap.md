@@ -1,6 +1,6 @@
 # Apple review follow-up
 
-- [ ] Add consent-based HubSpot website tracking using Jay's supplied tracking code, excluding native apps.
+- [x] Add consent-based HubSpot website tracking using Jay's supplied tracking code, excluding native apps; verified acceptance, decline, and withdrawal. Publish to activate on by5.run.
 
 - [x] Remove all Lovable branding from the site and code; badge hidden on published deployments.
 
